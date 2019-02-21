@@ -17,3 +17,5 @@ router.post('/auth/login/', Login);
 router.post('/auth/register', Register);
 
 router.get('/auth/check-username/', CheckUsername);
+
+export default router;
