@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 4999;
 
 mongoose.connect(mongoUrl, {useNewUrlParser: true}, err => {
     if (err){
-        boom.serverUnavailable('Database server not available');
+        return boom.serverUnavailable('Database server not available');
     }
 });
 

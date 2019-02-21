@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 
 const schema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
+    tokenHash: {
+        type: String,
+    },
     username: {
         type: String,
         required: true,
@@ -31,21 +34,17 @@ const schema = mongoose.Schema({
     },
     phoneNumber: {
         type: String,
-        required: true,
         min: 9, 
         max: 15,
-        unique: true,
         trim: true,
     },
     city:{
         type: String,
-        required: true,
         min: 4,
         max: 255,
     },
     state: {
         type: String,
-        required: true,
         min: 4,
         max: 255,
     },
@@ -58,7 +57,7 @@ const schema = mongoose.Schema({
     gender: {
         type: String,
         required: true,
-        enum: ['m0', 'f', 'o']
+        enum: ['m', 'f', 'o']
     },
     dob: {
         type: Date,

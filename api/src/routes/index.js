@@ -3,7 +3,8 @@ import bodyParser from 'body-parser';
 import { check } from 'express-validator/check';
 import multer from 'multer';
 import path from 'path';
-import { Login, Register, CheckUsername } from '../controller';
+
+import { Login, Register, CheckUsername } from '../controller/auth';
 
 const router = express.Router();
 
@@ -38,7 +39,7 @@ router.post('/auth/login/', [
 router.post('/auth/register', [
     check('name')
     .isLength({min:4,max:255})
-    .isAlphanumeric(),
+    .isString(),
     check('email')
     .isEmail(),
     check('username')
@@ -49,10 +50,9 @@ router.post('/auth/register', [
     .isLength({min:4, max:24}),
     check('country')
     .isLength({min:4,max:255})
-    .isAlphanumeric(),
+    .isString(),
     check('gender')
-    .isLength({min:4,max:255})
-    .isIn(['male', 'female', 'other']),
+    .isIn(['m', 'f', 'o']),
     check('dob')
     .custom(date => {
         return date.match(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
