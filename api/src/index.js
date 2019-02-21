@@ -6,6 +6,7 @@ import boom from 'boom';
 import routes from './routes';
 
 import { mongoUrl } from './config';
+import { dbError } from './messages';
 
 const app = express();
 
@@ -13,7 +14,7 @@ const PORT = process.env.PORT || 4999;
 
 mongoose.connect(mongoUrl, {useNewUrlParser: true}, err => {
     if (err){
-        return boom.serverUnavailable('Database server not available');
+        return boom.serverUnavailable(dbError);
     }
 });
 

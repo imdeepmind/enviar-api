@@ -13,7 +13,7 @@ import { jwtKey } from '../config';
 export const Login = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.json(boom.badData(validationError, errors.array()));
+        return res.status(422).json(boom.badData(validationError, errors.array()));
     }
 
     const username = xss(req.body.username);
@@ -37,11 +37,11 @@ export const Login = (req, res) => {
 
     Users.findOne({username:username}, selectedField, (err, doc) => {
         if (err){
-            return res.json(boom.serverUnavailable(dbError));
+            return res.status(503).json(boom.serverUnavailable(dbError));
         } else if (doc) {
             bcrypt.compare(password, doc.password, (err, hash) => {
                 if (err) {
-                    return res.json(boom.serverUnavailable(mainServerError))
+                    return res.status(503).json(boom.serverUnavailable(mainServerError))
                 } else if (hash) {
                     let tokenHash = "";
                     if (doc.tokenHash){
@@ -51,7 +51,7 @@ export const Login = (req, res) => {
                     }
                     Users.findOneAndUpdate({username:username},{tokenHash:tokenHash}, (err, _) => {
                         if (err) {
-                            return res.json(boom.serverUnavailable(dbError));
+                            return res.status(503).json(boom.serverUnavailable(dbError));
                         } else if (_) {
                             const token = jwt.sign(
                                 {
@@ -69,11 +69,11 @@ export const Login = (req, res) => {
                         }
                     })
                 } else {
-                    return res.json(boom.unauthorized(passwordError));
+                    return res.status(401).json(boom.unauthorized(passwordError));
                 }
             })
         } else {
-            return res.json(boom.notFound(usernameError));
+            return res.status(404).json(boom.notFound(usernameError));
         }
     })
 }
@@ -81,7 +81,7 @@ export const Login = (req, res) => {
 export const Register = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.json(boom.badData(validationError,  errors.array()));
+        return res.status(422).json(boom.badData(validationError,  errors.array()));
     }
 
     const name = xss(req.body.name);
@@ -115,13 +115,13 @@ export const Register = (req, res) => {
         $or: [ {username: username}, {email: email}]
     }, selectedField, (err, doc) => {
         if (err){
-            return res.json(boom.serverUnavailable(dbError));
+            return res.status(503).json(boom.serverUnavailable(dbError));
         } else if (doc) {
             return res.json(boom.conflict(usernameExists));
         } else {
             bcrypt.hash(password, 10, (err, hash) => {
                 if (err) {
-                    return res.json(boom.serverUnavailable(mainServerError))
+                    return res.status(503).json(boom.serverUnavailable(mainServerError))
                 } else if (hash) {
                     const newUser = Users({
                         _id: new mongoose.Types.ObjectId(),
@@ -136,7 +136,7 @@ export const Register = (req, res) => {
 
                     newUser.save((err, doc) => {
                         if (err) {
-                            return res.json(boom.serverUnavailable(dbError))
+                            return res.status(503).json(boom.serverUnavailable(dbError))
                         } else if (doc) {
                             return res.status(201).json({
                                 name: doc.name,
@@ -157,7 +157,7 @@ export const Register = (req, res) => {
 export const CheckUsername = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.json(boom.badData(validationError, errors.array()));
+        return res.status(422).json(boom.badData(validationError, errors.array()));
     }
 
     const username = xss(req.query.username);
@@ -184,13 +184,13 @@ export const CheckUsername = (req, res) => {
 
     Users.findOne({username:username}, selectedField, (err, doc) => {
         if (err){
-            return res.json(boom.serverUnavailable(dbError));
+            return res.status(503).json(boom.serverUnavailable(dbError));
         } else if (doc) {
             return res.status(200).json({
                 username: doc.username
             })
         } else {
-            return res.json(boom.notFound(usernameError));
+            return res.status(404).json(boom.notFound(usernameError));
         }
     })
 }
