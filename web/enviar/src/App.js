@@ -9,13 +9,15 @@ import {
 } from 'reactstrap';
 
 import TopNav from './containers/topNav';
+import Post from './components/post';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <TopNav />
-        <Container className="mt-4">
+        <div style={{height:"80px"}}></div>
+        <Container>
           <Row>
             <Col xs="12">
               <Form>
@@ -25,8 +27,8 @@ class App extends Component {
                 </div>
               </Form>
             </Col>
-            <Col xs="12" lg="8" className="mt-4">
-              <h1>FEED</h1>
+            <Col xs="12" lg="8" className="mt-4 p-lg-5">
+              <Post />
             </Col>
             <Col xs="12" lg="4" className="mt-4">
               <h1>Additional Information</h1>
