@@ -1,44 +1,47 @@
 // Lux 4.3.1
 // Bootswatch
 
+//
+// Color system
+//
+
 $white:    #fff !default;
 $gray-100: #f8f9fa !default;
-$gray-200: #e9ecef !default;
-$gray-300: #dee2e6 !default;
-$gray-400: #ADAFAE !default;
-$gray-500: #888 !default;
-$gray-600: #555 !default;
-$gray-700: #282828 !default;
-$gray-800: #222 !default;
-$gray-900: #212529 !default;
+$gray-200: #f7f7f9 !default;
+$gray-300: #eceeef !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #919aa1 !default;
+$gray-700: #55595c !default;
+$gray-800: #343a40 !default;
+$gray-900: #1a1a1a !default;
 $black:    #000 !default;
 
-$blue:    #2A9FD6 !default;
+$blue:    #007bff !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
 $pink:    #e83e8c !default;
-$red:     #CC0000 !default;
+$red:     #d9534f !default;
 $orange:  #fd7e14 !default;
-$yellow:  #FF8800 !default;
-$green:   #77B300 !default;
+$yellow:  #f0ad4e !default;
+$green:   #4BBF73 !default;
 $teal:    #20c997 !default;
-$cyan:    #9933CC !default;
+$cyan:    #1F9BCF !default;
 
-$primary:       $pink !default;
-$secondary:     $indigo !default;
+$primary:       $purple !default;
+$secondary:     $white !default;
 $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
-$light:         $gray-800 !default;
-$dark:          $gray-400 !default;
+$light:         $white !default;
+$dark:          $gray-800 !default;
 
 $yiq-contrasted-threshold:  185 !default;
 
 // Body
 
-$body-bg:       $black !default;
-$body-color:    $white !default;
+$body-color:                $purple !default;
 
 // Components
 
@@ -51,7 +54,6 @@ $border-radius-sm:            0 !default;
 $font-family-sans-serif:      "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
 
 $font-size-base:              0.875rem !default;
-$font-size-sm:                1.0rem !default;
 
 $h1-font-size:                2rem !default;
 $h2-font-size:                1.75rem !default;
@@ -61,7 +63,7 @@ $h5-font-size:                1rem !default;
 $h6-font-size:                0.75rem !default;
 
 $headings-font-weight:        300 !default;
-$headings-color:              $white !default;
+$headings-color:              $purple !default;
 
 // Tables
 
@@ -90,20 +92,22 @@ $btn-font-weight:             300 !default;
 
 $input-line-height:                     1.5 !default;
 
-$input-bg:                              $white !default;
+$input-bg:                              $gray-200 !default;
 $input-disabled-bg:                     $gray-300 !default;
 
 $input-group-addon-bg:                  $gray-300 !default;
 
+// Navs
+
+$nav-tabs-border-color:                       $table-border-color !default;
+$nav-tabs-link-hover-border-color:            $nav-tabs-border-color !default;
+$nav-tabs-link-active-color:                  $white !default;
+$nav-tabs-link-active-bg:                     $nav-tabs-border-color !default;
+$nav-tabs-link-active-border-color:           $nav-tabs-border-color !default;
+
 // Navbar
 
-$navbar-padding-y:                  1.5rem !default;
-
 $navbar-dark-hover-color:           $white !default;
-
-$navbar-light-color:                rgba($black,.3) !default;
-$navbar-light-hover-color:          $gray-900 !default;
-$navbar-light-active-color:         $gray-900 !default;
 
 // Pagination
 
@@ -116,5 +120,8 @@ $pagination-disabled-border-color:  $pagination-border-color !default;
 // Breadcrumbs
 
 $breadcrumb-bg:                     transparent !default;
+
+
+
 
 @import '~bootstrap/scss/bootstrap.scss';
