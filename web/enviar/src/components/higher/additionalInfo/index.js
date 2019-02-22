@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import {
-    Card, CardBody, CardTitle, Row, Col
+    Card, CardBody
 } from 'reactstrap';
 
 import ProfileCard from '../../lower/profileCard';
