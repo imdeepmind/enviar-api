@@ -9,7 +9,8 @@ import {
 } from 'reactstrap';
 
 import TopNav from './containers/topNav';
-import Post from './components/post';
+import Post from './components/higher/post';
+import AdditionalInfo from './components/higher/additionalInfo';
 
 class App extends Component {
   render() {
@@ -30,8 +31,8 @@ class App extends Component {
             <Col xs="12" lg="7" className="mt-4 ">
               <Post />
             </Col>
-            <Col xs="12" lg="5" className="mt-4 d-none d-lg-flex">
-              <h1>Additional Information</h1>
+            <Col xs="12" lg="5" className="mt-4 d-none d-lg-block">
+              <AdditionalInfo />
             </Col>
           </Row>
         </Container>

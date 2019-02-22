@@ -2,25 +2,17 @@ import React from 'react';
 import {
     Card, CardBody, CardImg, CardHeader, CardFooter, CardTitle
 } from 'reactstrap';
-import Avatar from '../avatar';
 
 import postImage from './post_sample.jpg';
+
+import ProfileCard from '../../lower/profileCard';
 
 
 const Post = (props) => {
     return (
-        <Card>
-            <CardHeader className="d-flex p-0">
-                <div className="d-flex justify-content-center align-items-center p-2 pl-3">
-                    <Avatar source="" title="Abhishek Chatterjee" />
-                </div>{" "}
-                <div className="p-2">
-                    Abhishek Chatterjee
-                    <br />
-                    <small>
-                        Cras id convallis urna. Vivamus congue, ligula in placerat commodo.
-                    </small>
-                </div>
+        <Card className="mb-3"> 
+            <CardHeader className="p-0">
+                <ProfileCard />
             </CardHeader>
             <CardImg top width="100%" src={postImage} alt="sample post" />
             <CardBody>
