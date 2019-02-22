@@ -23,14 +23,14 @@ class App extends Component {
               <Form>
                 <div className="d-flex">
                   <Input placeholder="Search..." />
-                  <Button color="primary" >Search</Button>
+                  <Button color="primary" ><i className="fas fa-search"></i></Button>
                 </div>
               </Form>
             </Col>
-            <Col xs="12" lg="8" className="mt-4 p-lg-5">
+            <Col xs="12" lg="7" className="mt-4 ">
               <Post />
             </Col>
-            <Col xs="12" lg="4" className="mt-4">
+            <Col xs="12" lg="5" className="mt-4 d-none d-lg-flex">
               <h1>Additional Information</h1>
             </Col>
           </Row>
