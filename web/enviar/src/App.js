@@ -8,12 +8,16 @@ import {
   Input,
 } from 'reactstrap';
 
+import ReallySmoothScroll from 'really-smooth-scroll';
+
 import TopNav from './containers/topNav';
 import Post from './components/higher/post';
 import AdditionalInfo from './components/higher/additionalInfo';
 
 import img1 from './assets/img/post_sample.jpg';
 import img2 from './assets/img/post_sample2.jpg';
+
+ReallySmoothScroll.shim();
 
 class App extends Component {
   render() {
