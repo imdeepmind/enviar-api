@@ -1,4 +1,6 @@
 .class-avatar{
-    width: 36px;
+    width: 48px;
     border-radius: 50%;
+    border: 2px solid #6f42c1;
+    padding: 1px;
 }
