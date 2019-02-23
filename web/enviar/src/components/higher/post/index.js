@@ -3,18 +3,16 @@ import {
     Card, CardBody, CardImg, CardHeader, CardFooter, CardTitle
 } from 'reactstrap';
 
-import postImage from './post_sample.jpg';
-
 import ProfileCard from '../../lower/profileCard';
 
 
 const Post = (props) => {
     return (
-        <Card className="mb-3"> 
+        <Card className="mb-4"> 
             <div className="p-2">
                 <ProfileCard />
             </div>
-            <CardImg top width="100%" src={postImage} alt="sample post" />
+            <CardImg top width="100%" src={props.image} alt="sample post" />
             <CardBody>
                 <CardTitle>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non iaculis odio. Donec dignissim nulla velit, vel iaculis erat vestibulum vel. Aenean pellentesque purus nec posuere posuere.</CardTitle>
             </CardBody>

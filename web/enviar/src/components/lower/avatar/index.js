@@ -1,9 +1,9 @@
 import React from 'react';
-import sample from './account.png';
+import sample from './account.jpg';
 
 const Avatar = (props) => {
     return (
-        <img className="class-avatar" src={props.source === undefined || props.source === '' ? sample : props.source} alt={props.title} />
+        <img className="class-avatar border border-primary" src={props.source === undefined || props.source === '' ? sample : props.source} alt={props.title} />
     )
 }
 

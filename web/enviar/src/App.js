@@ -12,6 +12,9 @@ import TopNav from './containers/topNav';
 import Post from './components/higher/post';
 import AdditionalInfo from './components/higher/additionalInfo';
 
+import img1 from './assets/img/post_sample.jpg';
+import img2 from './assets/img/post_sample2.jpg';
+
 class App extends Component {
   render() {
     return (
@@ -29,7 +32,8 @@ class App extends Component {
               </Form>
             </Col>
             <Col xs="12" lg="7" className="mt-4 ">
-              <Post />
+              <Post image={img2}/>
+              <Post image={img1}/>
             </Col>
             <Col xs="12" lg="5" className="mt-4 d-none d-lg-block">
               <AdditionalInfo />
