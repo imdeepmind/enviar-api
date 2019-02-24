@@ -66,9 +66,6 @@ const schema = mongoose.Schema({
     avatar: {
         type: String,
     },
-    cover: {
-        type: String,
-    },
     status: {
         type: String,
         min: 4,
