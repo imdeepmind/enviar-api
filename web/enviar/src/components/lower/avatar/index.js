@@ -1,5 +1,5 @@
 import React from 'react';
-import sample from './account.jpg';
+import sample from '../../../assets/img/account.jpg';
 
 const Avatar = (props) => {
     return (
