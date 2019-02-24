@@ -4,21 +4,25 @@ import { Card, CardBody, CardTitle, Form, Input, Button } from 'reactstrap';
 import Landing from '../../components/higher/landing';
 import Footer from '../../components/higher/footer';
 
-class Login extends Component{
+class Register extends Component{
     render(){
         return (
             <Fragment>
-                <Landing type="login"/>
+                <Landing type="register"/>
                 <div className="w-100 d-flex justify-content-center align-items-center pt-5 pb-5">
                     <Card>
                         <CardBody>
                             <CardTitle className="text-center">
-                                login
+                                register
                             </CardTitle>
                             <Form>
+                                <Input placeholder="name..." required />
                                 <Input placeholder="username..." required />
                                 <Input type="password" placeholder="password..." required />
-                                <Button type="submit" color="primary" className="w-100">login</Button>
+                                <Input placeholder="country..." required />
+                                <Input placeholder="gender..." required />
+                                <Input type="date" placeholder="date of birth..." required />
+                                <Button type="submit" color="primary" className="w-100">register</Button>
                             </Form>
                         </CardBody>
                     </Card>
@@ -29,4 +33,4 @@ class Login extends Component{
     }
 }
 
-export default Login;
+export default Register;

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import ReallySmoothScroll from 'really-smooth-scroll';
 
 import Login from './routes/login';
+import Register from './routes/register';
 import Home from './routes/home';
 
 ReallySmoothScroll.shim();
@@ -25,7 +26,7 @@ class App extends Component {
         <div className="App">
           <Switch>
             <Route path="/login" exact component={Login} />
-            <Route path="/register" exact component={null} />
+            <Route path="/register" exact component={Register} />
             <Route path="/" exact component={Home} />
           </Switch>
         </div>

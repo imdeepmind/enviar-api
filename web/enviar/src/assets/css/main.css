@@ -11,6 +11,9 @@
     height: 100vh;
     border-bottom-right-radius: 70%;
 }
+.text-underline{
+    text-decoration: underline;
+}
 
 @media (min-width: 992px){
     .class-landing{
