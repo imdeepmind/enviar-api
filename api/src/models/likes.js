@@ -13,6 +13,7 @@ const schema = mongoose.Schema({
     post: {
         type: String,
         required: true,
+        index: true,
     },
     createdAt: {
         type: Date,
