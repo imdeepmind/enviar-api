@@ -8,6 +8,8 @@ import Home from './routes/home';
 
 ReallySmoothScroll.shim();
 
+const baseUrl = process.env.PUBLIC_URL;
+
 const PrivateRoute = ({ component: Component, ...rest }) => {
   let auth = localStorage.getItem('user');
   return (
@@ -25,9 +27,9 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <Switch>
-            <Route path="/login" exact component={Login} />
-            <Route path="/register" exact component={Register} />
-            <Route path="/" exact component={Home} />
+            <Route path={baseUrl + "/login"} exact component={Login} />
+            <Route path={baseUrl + "/register"} exact component={Register} />
+            <Route path={baseUrl + "/"} exact component={Home} />
           </Switch>
         </div>
       </BrowserRouter>
