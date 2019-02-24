@@ -18,9 +18,8 @@ const schema = mongoose.Schema({
     },
     title: {
         type: String,
-        required: true,
         min: 4,
-        max: 24,
+        max: 255,
     },
     likes: {
         totalLike: {
