@@ -47,6 +47,7 @@ class TopNav extends Component{
                         </Nav>
                     </Collapse>
                 </Navbar>
+                <div style={{height:"80px"}}></div>
             </div>
         )
     }
