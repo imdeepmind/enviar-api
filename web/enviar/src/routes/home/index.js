@@ -53,7 +53,12 @@ class Home extends Component{
                                 commentMethod={() => this.commentPost("13asdf")} />
                         </Col>
                         <Col xs="12" lg="5" className="mt-4 d-none d-lg-block">
-                            <AdditionalInfo />
+                            <AdditionalInfo 
+                                name={"imdeepmind"}
+                                avatar={""}
+                                text={"lets write something that make no sence becouse after all this is just for testing"}
+                                followers={"2315"}
+                                following={"321"}/>
                         </Col>
                     </Row>
                 </Container>

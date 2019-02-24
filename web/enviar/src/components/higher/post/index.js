@@ -10,7 +10,10 @@ const Post = (props) => {
     return (
         <Card className="mb-4"> 
             <div className="p-2">
-                <ProfileCard name={props.name} avatar={props.avatar} text={props.text}/>
+                <ProfileCard 
+                    name={props.name} 
+                    avatar={props.avatar} 
+                    text={props.text} />
             </div>
             <CardImg top width="100%" src={props.image} alt={props.title} />
             <CardBody>
