@@ -10,7 +10,7 @@ import QuickActions from '../../lower/quickActions';
 
 const AdditionalInfo = (props) => {
     return (
-        <Fragment>
+        <div>
             <Card>
                 <CardBody>
                     <ProfileCard 
@@ -24,7 +24,7 @@ const AdditionalInfo = (props) => {
                 <CountCard title="Following" value={props.following} />
             </div>
             <QuickActions />
-        </Fragment>
+        </div>
     )
 }
 

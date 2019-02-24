@@ -3,3 +3,6 @@
     border-radius: 50%;
     padding: 1px;
 }
+.class-cursor-pointer{
+    cursor: pointer;
+}

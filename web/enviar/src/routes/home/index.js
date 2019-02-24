@@ -11,7 +11,7 @@ import img2 from '../../assets/img/post_sample2.jpg';
 
 class Home extends Component{
     likePost = id =>{
-        console.log(`Likked the post with id ${id}`);
+        console.log(`Liked the post with id ${id}`);
     }
     commentPost = id => {
         console.log(`Comment the post with id ${id}`);
@@ -53,7 +53,7 @@ class Home extends Component{
                                 commentMethod={() => this.commentPost("13asdf")} />
                         </Col>
                         <Col xs="12" lg="5" className="mt-4 d-none d-lg-block">
-                            <AdditionalInfo 
+                            <AdditionalInfo
                                 name={"imdeepmind"}
                                 avatar={""}
                                 text={"lets write something that make no sence becouse after all this is just for testing"}
