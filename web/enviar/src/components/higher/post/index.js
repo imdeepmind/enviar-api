@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Card, CardBody, CardImg, CardHeader, CardFooter, CardTitle
+    Card, CardBody, CardImg, CardTitle
 } from 'reactstrap';
 
 import ProfileCard from '../../lower/profileCard';
@@ -10,18 +10,18 @@ const Post = (props) => {
     return (
         <Card className="mb-4"> 
             <div className="p-2">
-                <ProfileCard />
+                <ProfileCard name={props.name} avatar={props.avatar} text={props.text}/>
             </div>
-            <CardImg top width="100%" src={props.image} alt="sample post" />
+            <CardImg top width="100%" src={props.image} alt={props.title} />
             <CardBody>
-                <CardTitle>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non iaculis odio. Donec dignissim nulla velit, vel iaculis erat vestibulum vel. Aenean pellentesque purus nec posuere posuere.</CardTitle>
+                <CardTitle>{props.title}</CardTitle>
             </CardBody>
             <div className="d-flex justify-content-between align-items-center pl-3 pr-3 pb-2 pt-2 border-top" style={{fontSize:"1.2em"}}>
                 <div>
-                    <i className="far fa-heart"></i> <span>514 likes</span> 
+                    <i className="far fa-heart class-cursor-pointer" onClick={props.likeMethod}></i> <span>{props.likes} likes</span> 
                 </div>
                 <div>
-                    <i class="far fa-comment-dots float-right"></i>
+                    <i class="far fa-comment-dots float-right class-cursor-pointer" onClick={props.commentMethod}></i>
                 </div>
             </div>
         </Card>
