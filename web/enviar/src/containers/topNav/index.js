@@ -6,14 +6,14 @@ import {
     NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
 } from 'reactstrap';
+
+import { NavLink } from 'react-router-dom';
 
 
 class TopNav extends Component{
     constructor(props) {
         super(props);
-
         this.toggle = this.toggle.bind(this);
         this.state = {
             isOpen: false
@@ -27,22 +27,22 @@ class TopNav extends Component{
     render(){
         return (
             <div>
-                <Navbar color="primary" dark expand="xs" className="position-fixed w-100" style={{zIndex:"1030"}}>
-                    <NavbarBrand href="/" title="home">enviar</NavbarBrand>
+                <Navbar color="light" light expand="xs" className="position-fixed w-100 border-bottom " style={{zIndex:"1030"}}>
+                    <NavbarBrand title="home"><NavLink to="/" className="text-dark">enviar</NavLink></NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <NavLink title="notifications" href="/components/"><i className="fas fa-bell"></i></NavLink>
+                                <NavLink className="m-1 text-dark"  title="notifications" to="/components/"><i className="fas fa-bell"></i></NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink title="messages" href="https://github.com/reactstrap/reactstrap"><i className="fas fa-comments"></i></NavLink>
+                                <NavLink className="m-1 text-dark"  title="messages" to="https://github.com/reactstrap/reactstrap"><i className="fas fa-comments"></i></NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink title="profile" href="https://github.com/reactstrap/reactstrap"><i className="fas fa-user-alt"></i></NavLink>
+                                <NavLink className="m-1 text-dark"  title="profile" to="/profile"><i className="fas fa-user-alt"></i></NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink title="log out" href="https://github.com/reactstrap/reactstrap"><i className="fas fa-sign-out-alt"></i></NavLink>
+                                <NavLink className="m-1 text-dark"  title="log out" to="https://github.com/reactstrap/reactstrap"><i className="fas fa-sign-out-alt"></i></NavLink>
                             </NavItem>
                         </Nav>
                     </Collapse>

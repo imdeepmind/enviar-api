@@ -5,6 +5,7 @@ import ReallySmoothScroll from 'really-smooth-scroll';
 import Login from './routes/login';
 import Register from './routes/register';
 import Home from './routes/home';
+import Profile from './routes/profile';
 
 ReallySmoothScroll.shim();
 
@@ -30,6 +31,7 @@ class App extends Component {
             <Route path={"/login"} exact component={Login} />
             <Route path={"/register"} exact component={Register} />
             <Route path={"/"} exact component={Home} />
+            <Route path={"/profile"} exact component={Profile} />
           </Switch>
         </div>
       </Router>
