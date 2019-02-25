@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import ReallySmoothScroll from 'really-smooth-scroll';
 
 import Login from './routes/login';
@@ -24,15 +24,15 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
+      <Router basename={baseUrl}>
         <div className="App">
           <Switch>
-            <Route path={baseUrl + "/login"} exact component={Login} />
-            <Route path={baseUrl + "/register"} exact component={Register} />
-            <Route path={baseUrl + "/"} exact component={Home} />
+            <Route path={"/login"} exact component={Login} />
+            <Route path={"/register"} exact component={Register} />
+            <Route path={"/"} exact component={Home} />
           </Switch>
         </div>
-      </BrowserRouter>
+      </Router>
     );
   }
 }
