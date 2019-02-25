@@ -1,5 +1,4 @@
 .class-avatar{
-    width: 48px;
     border-radius: 50%;
     padding: 1px;
 }
@@ -13,6 +12,9 @@
 }
 .text-underline{
     text-decoration: underline;
+}
+.h-100vh{
+    height: 100vh;
 }
 
 @media (min-width: 992px){

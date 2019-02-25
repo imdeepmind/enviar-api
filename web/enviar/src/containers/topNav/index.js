@@ -42,7 +42,7 @@ class TopNav extends Component{
                                 <NavLink className="m-1 text-dark"  title="profile" to="/profile"><i className="fas fa-user-alt"></i></NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="m-1 text-dark"  title="log out" to="https://github.com/reactstrap/reactstrap"><i className="fas fa-sign-out-alt"></i></NavLink>
+                                <NavLink className="m-1 text-dark"  title="log out" to="/login"><i className="fas fa-sign-out-alt"></i></NavLink>
                             </NavItem>
                         </Nav>
                     </Collapse>
