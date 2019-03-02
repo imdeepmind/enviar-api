@@ -4,7 +4,10 @@ import { check } from 'express-validator/check';
 import multer from 'multer';
 import path from 'path';
 
+import { checkAuth } from '../middleware';
+
 import { Login, Register, CheckUsername } from '../controller/auth';
+import { GetMe } from '../controller/me';
 
 const router = express.Router();
 
@@ -65,6 +68,6 @@ router.get('/auth/check-username/', [
     .isAlphanumeric(),
 ], CheckUsername);
 
-// route.get('/me/')
+router.get('/me/', checkAuth, GetMe);
 
 export default router;

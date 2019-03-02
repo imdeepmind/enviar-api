@@ -6,6 +6,7 @@ import xss from 'xss';
 import boom from 'boom';
 
 import Users from '../models/users';
+
 import { validationError, dbError, usernameExists, mainServerError, usernameError, passwordError } from '../messages';
 import { generateHash } from '../methods';
 import { jwtKey } from '../config';

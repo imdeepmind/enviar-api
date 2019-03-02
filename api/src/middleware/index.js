@@ -14,7 +14,7 @@ export const checkAuth = (req, res, next) => {
 
             users.findOne({username: authData.username, tokenHash: authData.hash}, (err, doc) => {
                 if (err) return res.status(503).json(boom.serverUnavailable(serverUnavailable));
-                if (doc) req.authData = authData || next();
+                if (doc) return (req.authData = authData || next());
                 return res.status(401).json(boom.unauthorized(unauthorized));
             }) 
         });
