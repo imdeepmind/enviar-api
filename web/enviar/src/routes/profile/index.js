@@ -52,17 +52,17 @@ class Profile extends Component{
                     <Row>
                         <Nav tabs>
                             <NavItem>
-                                <NavLink className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.toggle('1'); }}>
+                                <NavLink className={classnames({ "class-cursor-pointer":true, active: this.state.activeTab === '1' })} onClick={() => { this.toggle('1'); }}>
                                     <i className="fas fa-images text-dark"></i>{" "}<span className="text-dark">Posts</span>
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.toggle('2'); }}>
+                                <NavLink className={classnames({ "class-cursor-pointer":true, active: this.state.activeTab === '2' })} onClick={() => { this.toggle('2'); }}>
                                     <i className="fas fa-user-friends text-dark"></i>{" "}<span className="text-dark">Followers</span>
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className={classnames({ active: this.state.activeTab === '3' })} onClick={() => { this.toggle('3'); }}>
+                                <NavLink className={classnames({ "class-cursor-pointer":true, active: this.state.activeTab === '3' })} onClick={() => { this.toggle('3'); }}>
                                     <i className="fas fa-user-friends text-dark"></i>{" "}<span className="text-dark">Following</span>
                                 </NavLink>
                             </NavItem>

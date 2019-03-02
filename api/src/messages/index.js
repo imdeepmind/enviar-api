@@ -4,3 +4,4 @@ export const usernameExists = "Username or email already exists!";
 export const usernameError = "Username does not exists!";
 export const passwordError = "Wrong password!";
 export const validationError = "Validation error!"
+export const unauthorised = "Unauthorised";

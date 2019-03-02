@@ -65,4 +65,6 @@ router.get('/auth/check-username/', [
     .isAlphanumeric(),
 ], CheckUsername);
 
+// route.get('/me/')
+
 export default router;
