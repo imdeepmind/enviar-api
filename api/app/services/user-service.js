@@ -108,3 +108,41 @@ export const updateByUsername = (dt, id) => {
 
     return deferred.promise;
 }
+
+export const DeleteByID = id => {
+    const deferred = Q.defer();
+    
+    const findQuery = {
+        '_id' : {$eq: mongoose.Types.ObjectId(id)}
+    }
+
+    users.findOneAndRemove(findQuery, (err, doc) => {
+        if (err){
+            deferred.reject(err);
+            logger.info('Database error', err);
+        } else if (doc) {
+            deferred.resolve(doc);
+        }
+    })
+
+    return deferred.promise;
+}
+
+export const DeleteByUsername = id => {
+    const deferred = Q.defer();
+    
+    const findQuery = {
+        'username' : {$eq: username}
+    }
+
+    users.findOneAndRemove(findQuery, (err, doc) => {
+        if (err){
+            deferred.reject(err);
+            logger.info('Database error', err);
+        } else if (doc) {
+            deferred.resolve(doc);
+        }
+    })
+
+    return deferred.promise;
+}
