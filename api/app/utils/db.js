@@ -11,7 +11,6 @@ const connect = () => {
         }
         logger.info(`Connected to mongodb database at ${mongoUrl}`);
     });
-
     return true;
 }
 
