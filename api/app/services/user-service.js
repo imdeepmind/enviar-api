@@ -29,8 +29,10 @@ export const findByUsername = username => {
     const deferred = Q.defer();
 
     username = processInput(username, 'username');
-    if (!username)
+    if (!username){
         deferred.reject('Invalid username');
+    }
+        
 
     const findQuery = {
         "username" : {$eq: processInput(username, 'username')}

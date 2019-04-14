@@ -4,8 +4,6 @@ import cors from 'cors';
 import logger from './app/utils/logger';
 import connect from './app/utils/db'; 
 
-import { findByUsername } from './app/services/user-service';
-
 const app = express();
 const port = process.env.PORT || 4999;
 const webPass = process.env.WEBPASS || ['*'];
@@ -44,16 +42,6 @@ app.put('*', function (req, res, next) {
 	err.status = 404;
 	next(err);
 });
-
-
-findByUsername('imdeepmind')
-.then(dt => {
-    logger.info(dt);
-})
-.catch(err => {
-    logger.info(err);
-})
-// logger.info(JSON.stringify(findByUsername('imdeep234234#$%^&*mind')));
 
 app.listen(port, () => {
     logger.info(`The API is running at port ${port}`);

@@ -17,31 +17,31 @@ export default (input, type, title='') => {
         case 'name':
             if (!checkName(cleaned_input)){
                 logger.debug(`${cleaned_input} is invalid ${title}`);
-                isError = false;
+                isError = true;
             }
             break;
         case 'email':
             if (!checkEmail(cleaned_input)){
                 logger.debug(`${cleaned_input} is invalid ${title}`);
-                isError = false;
+                isError = true;
             }
             break;
         case 'username':
             if (!checkUsername(cleaned_input)){
                 logger.debug(`${cleaned_input} is invalid ${title}`);
-                isError = false;
+                isError = true;
             }
             break;
         case 'gender':
             if (!checkGender(cleaned_input)){
                 logger.debug(`${cleaned_input} is invalid ${title}`);
-                isError = false;
+                isError = true;
             }
             break;
         case 'dob':
             if (!checkDob(cleaned_input)){
                 logger.debug(`${cleaned_input} is invalid ${title}`);
-                isError = false;
+                isError = true;
             }
             break;
     }

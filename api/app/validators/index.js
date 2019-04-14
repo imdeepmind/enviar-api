@@ -1,5 +1,6 @@
 import validator from 'validator';
 import xss from 'xss';
+import logger from '../utils/logger';
 
 export const checkUsername = username => {
     return validator.isAlphanumeric(xss(username));
