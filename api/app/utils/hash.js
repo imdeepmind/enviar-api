@@ -1,8 +1,6 @@
 import bcrypt from 'bcrypt';
 import Q from 'q';
 
-import logger from '../utils/logger';
-
 export const generateHash = () => {
     const length = 20;
     let text = "";
@@ -19,7 +17,20 @@ export const generatePasswordHash = password => {
 
     bcrypt.hash(password, 10, (err, hash) => {
         if (err) {
-            logger.info(`bcrypt hash error`, err);
+            deferred.reject(err);
+        } else if (hash) {
+            deferred.resolve(hash);
+        }
+    })
+
+    return deferred.promise;
+}
+
+export const comparePassword = (old_pas, new_pass) => {
+    const deferred = Q.defer();
+
+    bcrypt.compare(old_pas, new_pass, (err, hash) => {
+        if (err) {
             deferred.reject(err);
         } else if (hash) {
             deferred.resolve(hash);

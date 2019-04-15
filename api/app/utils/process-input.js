@@ -6,7 +6,7 @@ import {
     checkName, checkUsername, checkEmail, checkGender, checkDob
 } from '../validators';
 
-export default (input, type, title='') => {
+export default (input, res, type, title='',) => {
     let cleaned_input = xss(input);
     let isError = false;
 
@@ -47,7 +47,7 @@ export default (input, type, title='') => {
     }
 
     if (isError) {
-        return false;
+        jsonWriter(`The ${input} is invalid for the field ${title}`, 401, res);
     } else {
         return cleaned_input;
     }

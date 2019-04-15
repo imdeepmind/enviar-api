@@ -4,6 +4,7 @@ import Q from 'q';
 import users from '../models/users';
 import logger from '../utils/logger';
 import processInput from '../utils/process-input';
+import { generatePasswordHash } from '../utils/hash';
 
 export const findByID = (id, fields) => {
     const deferred = Q.defer();
@@ -58,13 +59,28 @@ export const insert = dt => {
         deferred.reject('Username already exists'); 
     })
     .catch(_ => {
-        u.save((err, doc) => {
-            if (err){
-                deferred.reject(err);
-                logger.info('Database error', err);
-            } else if (doc) {
-                deferred.resolve(doc);
-            }
+        generatePasswordHash(dt.password)
+        .then(hash => {
+            dt.password = hash;
+            u.save((err, doc) => {
+                if (err){
+                    deferred.reject(err);
+                    logger.info('Database error', err);
+                } else if (doc) {
+                    deferred.resolve({
+                        name: doc.name,
+                        username: doc.username,
+                        email: doc.email,
+                        country: doc.country,
+                        dob: doc.dob,
+                        gender: doc.gender,
+                    });
+                }
+            })
+        })
+        .catch(err => {
+            logger.info(`bcrypt hash error`, err);
+            deferred.reject(err);
         })
     })
 

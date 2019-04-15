@@ -1,9 +1,17 @@
 import validator from 'validator';
 import xss from 'xss';
-import logger from '../utils/logger';
+import mongoose from 'mongoose';
+
+export const checkID = id => {  
+    return mongoose.Types.ObjectId.isValid(id);
+}
 
 export const checkUsername = username => {
     return validator.isAlphanumeric(xss(username));
+}
+
+export const checkPassword = password => {
+    return validator.isLength(password, {min:4, max:24});
 }
 
 export const checkName = name => {
