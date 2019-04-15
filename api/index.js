@@ -1,12 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { check } from 'express-validator/check';
 
 import logger from './app/utils/logger';
 import connect from './app/utils/db'; 
 
-import { checkID, checkName, checkUsername, checkDob, checkEmail, checkGender } from './app/validators';
+import auth from './app/routes/v1/auth';
 
 const app = express();
 const port = process.env.PORT || 4999;
@@ -27,50 +26,23 @@ app.use(bodyParser.urlencoded({
 }));
 
 // Log Incoming requests
-app.all('*', (req, res) => {
-    logger.info(`Incoming request: ${req.method}`);
+app.all('*', (req, res, next) => {
+    logger.info(`Incoming request: ${req.method} : ${req.url}`);
     return next();
 });
 
-
 // AUTH
-app.post('/login', [
-    check('username')
-    .custom(checkUsername),
-    check('password')
-    .isString()
-    .isLength({min:4, max:24}),
-],)
+app.use('/api/v1/', auth);
 
-
-
+// Handling invalid routes
 app.all('*', function (req, res, next) {
+    logger.info('hitting a 404');
 	const err = new Error();
 	err.status = 404;
 	next(err);
 });
-// insert({
-//     "username" : "imdeepmind",
-//     "password" : "12345",
-//     "name" : "Abhishek Chatterjee",
-//     "email" : "infinityatme@gmail.com",
-//     "city" : "Guwahati",
-//     "state" : "Assam",
-//     "country" : "India",
-//     "gender" : "m",
-//     "dob" : "1997-01-17",
-//     "avatar" : "",
-//     "status" : "Sample status",
-//     "bio" : "Sample bio"
-// })
-// .then(resp => {
-//     logger.info('resp');
-// })
-// .catch(err => {
-//     logger.info(err);
-// })
 
-
+// The is running at port
 app.listen(port, () => {
     logger.info(`The API is running at port ${port}`);
 });
