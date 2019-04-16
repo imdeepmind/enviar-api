@@ -38,7 +38,27 @@ export const findByUsername = (username, fields) => {
         } else if (doc) {
             deferred.resolve(doc);
         } else {
-            deferred.resolve(false);
+            deferred.reject(false);
+        }
+    })
+
+    return deferred.promise;
+}
+
+export const findByEmail = (email, fields) => {
+    const deferred = Q.defer();
+    const findQuery = {
+        "email" : {$eq: email}
+    }
+
+    users.findOne(findQuery, fields, (err, doc) => {
+        if (err) {
+            deferred.reject(err);
+            logger.info('Database error', err);
+        } else if (doc) {
+            deferred.resolve(doc);
+        } else {
+            deferred.reject(false);
         }
     })
 
@@ -50,36 +70,42 @@ export const insert = dt => {
 
     dt._id = new mongoose.Types.ObjectId();
 
-    const u = users(dt);
-
     findByUsername(dt.username)
-    .then(resp => {
+    .then(_ => {
         logger.info(`Username ${dt.username} already exists`);
-        deferred.reject('Username already exists'); 
+        deferred.reject('m400.0'); 
     })
     .catch(_ => {
-        generatePasswordHash(dt.password)
-        .then(hash => {
-            dt.password = hash;
-            u.save((err, doc) => {
-                if (err){
-                    deferred.reject(err);
-                    logger.info('Database error', err);
-                } else if (doc) {
-                    deferred.resolve({
-                        name: doc.name,
-                        username: doc.username,
-                        email: doc.email,
-                        country: doc.country,
-                        dob: doc.dob,
-                        gender: doc.gender,
-                    });
-                }
+        findByEmail(dt.email)
+        .then(_ => {
+            logger.info(`Email ${dt.email} already exists`);
+            deferred.reject('m400.0'); 
+        }) 
+        .catch(_ => {
+            generatePasswordHash(dt.password)
+            .then(hash => {
+                dt.password = hash;
+                const u = users(dt);
+                u.save((err, doc) => {
+                    if (err){
+                        deferred.reject('m500.0');
+                        logger.info('Database error ', err);
+                    } else if (doc) {
+                        deferred.resolve({
+                            name: doc.name,
+                            username: doc.username,
+                            email: doc.email,
+                            country: doc.country,
+                            dob: doc.dob,
+                            gender: doc.gender,
+                        });
+                    }
+                })
             })
-        })
-        .catch(err => {
-            logger.info(`bcrypt hash error`, err);
-            deferred.reject(err);
+            .catch(err => {
+                logger.info(`bcrypt hash error`, err);
+                deferred.reject('m500.0');
+            })
         })
     })
 

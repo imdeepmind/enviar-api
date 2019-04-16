@@ -3,6 +3,7 @@ import xss from 'xss';
 import { generatePasswordHash, generateHash, comparePassword  } from '../utils/hash';
 import { insert } from '../services/user-service';
 import logger from '../utils/logger';
+import messages from '../messages';
 
 export const register = (req, res) => {
     req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
@@ -14,9 +15,11 @@ export const register = (req, res) => {
     req.check('country', 'Invalid country').isString().isLength({min:4, max:255}).isAlphanumeric();
 
     const errors = req.validationErrors();
-    if (errors) 
-        return res.boom.badRequest("Validation didn't succeed", errors);
-
+    if (errors) {
+        logger.info('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+        
     const data = {
         username: xss(req.body.username),
         password: req.body.password,
@@ -27,15 +30,21 @@ export const register = (req, res) => {
         dob: xss(req.body.dob)
     }
 
-
-    // insert(data)
-    // .then(resp => {
-    //     logger.info(`User with ${data.username} username account created`);
-    //     jsonWriter()
-    // })
-    // .catch(err => {
-        
-    // })
+    insert(data)
+    .then(resp => {
+        logger.info(`User with ${data.username} username account created`);
+        return res.status(201).json({
+            'message' : messages['m201.0'],
+            'data': resp
+        })
+    })
+    .catch(err => {
+        if (err === 'm400.0' || err === 'm400.1'){
+            res.boom.badRequest(messages[err]);
+        } else if (err === 'm500.0'){
+            res.boom.badImplementation(messages[err]);
+        }
+    })
 
 }
 
