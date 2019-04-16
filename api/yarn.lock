@@ -875,7 +875,7 @@ body-parser@1.18.3, body-parser@^1.18.3:
     raw-body "2.3.3"
     type-is "~1.6.16"
 
-boom@^7.3.0:
+boom@^7.3.x:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/boom/-/boom-7.3.0.tgz#733a6d956d33b0b1999da3fe6c12996950d017b9"
   integrity sha512-Swpoyi2t5+GhOEGw8rEsKvTxFLIDiiKoUc2gsoV6Lyr43LHBIzch3k2MvYUs8RTROrIkVJ3Al0TkaOGjnb+B6A==
@@ -1573,6 +1573,13 @@ expand-range@^1.8.1:
   integrity sha1-opnv/TNf4nIeuujiV+x5ZE/IUzc=
   dependencies:
     fill-range "^2.1.0"
+
+express-boom@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/express-boom/-/express-boom-3.0.0.tgz#d8146f1eea1bf6611f622141c6689ca6defa09f0"
+  integrity sha512-/esN6Am8YE1rzRsi+vBpJkdr8O+GX+oBjRE/hEuBu6Y3uyS9y026XptRZduAMYS8KxyLzXM5Qh+RlnqLOR1pVQ==
+  dependencies:
+    boom "^7.3.x"
 
 express-validator@^5.3.1:
   version "5.3.1"

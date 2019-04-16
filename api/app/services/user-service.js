@@ -3,7 +3,6 @@ import Q from 'q';
 
 import users from '../models/users';
 import logger from '../utils/logger';
-import processInput from '../utils/process-input';
 import { generatePasswordHash } from '../utils/hash';
 
 export const findByID = (id, fields) => {
@@ -29,7 +28,7 @@ export const findByID = (id, fields) => {
 export const findByUsername = (username, fields) => {
     const deferred = Q.defer();
     const findQuery = {
-        "username" : {$eq: processInput(username, 'username')}
+        "username" : {$eq: username}
     }
 
     users.findOne(findQuery, fields, (err, doc) => {

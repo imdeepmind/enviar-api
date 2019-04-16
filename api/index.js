@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import expressValidator from 'express-validator';
+import expressBoom from 'express-boom';
 
 import logger from './app/utils/logger';
 import connect from './app/utils/db'; 
@@ -28,6 +29,9 @@ app.use(bodyParser.urlencoded({
 
 // Validator
 app.use(expressValidator());
+
+// Boom error
+app.use(expressBoom());
 
 // Log Incoming requests
 app.all('*', (req, res, next) => {
