@@ -53,12 +53,12 @@ export const findByEmail = (email, fields) => {
 
     users.findOne(findQuery, fields, (err, doc) => {
         if (err) {
-            deferred.reject(err);
+            deferred.reject('m500.0');
             logger.info('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
         } else {
-            deferred.reject(false);
+            deferred.reject('m404.0');
         }
     })
 

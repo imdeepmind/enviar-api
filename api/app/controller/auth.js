@@ -1,7 +1,6 @@
 import xss from 'xss';
 
-import { generatePasswordHash, generateHash, comparePassword  } from '../utils/hash';
-import { insert } from '../services/user-service';
+import { insert, findByEmail, findByUsername } from '../services/user-service';
 import logger from '../utils/logger';
 import messages from '../messages';
 
@@ -49,24 +48,48 @@ export const register = (req, res) => {
 }
 
 export const login = (req, res) => {
-    logger.info('at login controller');
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
+    req.check('password', 'Invalid password').isString().isLength({min:4, max:24}).isAlphanumeric();
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.info('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
+    const data = {
+        username: xss(req.body.username),
+        password: req.body.password,
+    }
+
 }
 
-export const username = (req, res) => {
-    logger.info('at username controller');
-}
+export const checkUsername = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
 
-// insert({
-//     "username" : "imdeepmind",
-//     "password" : "12345",
-//     "name" : "Abhishek Chatterjee",
-//     "email" : "infinityatme@gmail.com",
-//     "city" : "Guwahati",
-//     "state" : "Assam",
-//     "country" : "India",
-//     "gender" : "m",
-//     "dob" : "1997-01-17",
-//     "avatar" : "",
-//     "status" : "Sample status",
-//     "bio" : "Sample bio"
-// })
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.info('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
+    const data = {
+        username: xss(req.body.username)
+    }
+
+    findByUsername(data)
+    .then(_ => {
+        logger.info(`User with ${data.username} found`);
+        return res.status(201).json({
+            'message' : messages['m201.1'],
+            'data': true
+        })
+    })
+    .catch(err => {
+        if (err === 'm404.0'){
+            res.boom.notFound(messages[err]);
+        } else if (err === 'm500.0'){
+            res.boom.badImplementation(messages[err]);
+        }
+    })
+}
