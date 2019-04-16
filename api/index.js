@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import expressValidator from 'express-validator';
 
 import logger from './app/utils/logger';
 import connect from './app/utils/db'; 
@@ -25,14 +26,17 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+// Validator
+app.use(expressValidator());
+
 // Log Incoming requests
 app.all('*', (req, res, next) => {
     logger.info(`Incoming request: ${req.method} : ${req.url}`);
     return next();
 });
 
-// AUTH
-app.use('/api/v1/', auth);
+// Auth
+app.use('/api/v1/auth', auth);
 
 // Handling invalid routes
 app.all('*', function (req, res, next) {

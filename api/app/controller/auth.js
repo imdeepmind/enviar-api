@@ -33,6 +33,10 @@ export const login = (req, res) => {
     logger.info('at login controller');
 }
 
+export const username = (req, res) => {
+    logger.info('at username controller');
+}
+
 // insert({
 //     "username" : "imdeepmind",
 //     "password" : "12345",
