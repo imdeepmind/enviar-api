@@ -74,12 +74,42 @@ export const checkUsername = (req, res) => {
     }
 
     const data = {
-        username: xss(req.body.username)
+        username: xss(req.params.username)
     }
 
-    findByUsername(data)
+    findByUsername(data.username, {_id: 1})
     .then(_ => {
         logger.info(`User with ${data.username} found`);
+        return res.status(201).json({
+            'message' : messages['m201.1'],
+            'data': true
+        })
+    })
+    .catch(err => {
+        if (err === 'm404.0'){
+            res.boom.notFound(messages[err]);
+        } else if (err === 'm500.0'){
+            res.boom.badImplementation(messages[err]);
+        }
+    })
+}
+
+export const checkEmail = (req, res) => {
+    req.check('email', 'Invalid email').isString().isLength({min:4, max:255}).isEmail();
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.info('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
+    const data = {
+        email: xss(req.params.email)
+    }
+
+    findByEmail(data.email, {_id: 1})
+    .then(_ => {
+        logger.info(`User with ${data.email} found`);
         return res.status(201).json({
             'message' : messages['m201.1'],
             'data': true

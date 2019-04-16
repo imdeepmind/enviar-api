@@ -38,7 +38,7 @@ export const findByUsername = (username, fields) => {
         } else if (doc) {
             deferred.resolve(doc);
         } else {
-            deferred.reject(false);
+            deferred.reject('m404.0');
         }
     })
 
