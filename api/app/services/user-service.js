@@ -13,7 +13,7 @@ export const findByID = (id, fields) => {
 
     users.findById(findQuery, fields, (err, doc) => {
         if (err) {
-            logger.info('Database error', err);
+            logger.error('Database error', err);
             deferred.reject('m500.0');
         } else if (doc) {
             deferred.resolve(doc);
@@ -33,7 +33,7 @@ export const findByUsername = (username, fields) => {
 
     users.findOne(findQuery, fields, (err, doc) => {
         if (err) {
-            logger.info('Database error', err);
+            logger.error('Database error', err);
             deferred.reject('m500.0');
         } else if (doc) {
             deferred.resolve(doc);
@@ -53,7 +53,7 @@ export const findByEmail = (email, fields) => {
 
     users.findOne(findQuery, fields, (err, doc) => {
         if (err) {
-            logger.info('Database error', err);
+            logger.error('Database error', err);
             deferred.reject('m500.0');
         } else if (doc) {
             deferred.resolve(doc);
@@ -122,7 +122,7 @@ export const updateByID = (dt, id) => {
     users.findOneAndUpdate(findQuery, dt, (err, doc) => {
         if (err){
             deferred.reject('m500.0');
-            logger.info('Database error', err);
+            logger.error('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
         } 
@@ -143,7 +143,7 @@ export const updateByUsername = (dt, username) => {
     users.findOneAndUpdate(findQuery, dt, (err, doc) => {
         if (err){
             deferred.reject('m500.0');
-            logger.info('Database error', err);
+            logger.error('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
         }
@@ -164,7 +164,7 @@ export const DeleteByID = id => {
     users.findOneAndRemove(findQuery, (err, doc) => {
         if (err){
             deferred.reject('m500.0');
-            logger.info('Database error', err);
+            logger.error('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
         }
@@ -185,7 +185,7 @@ export const DeleteByUsername = id => {
     users.findOneAndRemove(findQuery, (err, doc) => {
         if (err){
             deferred.reject('m500.0');
-            logger.info('Database error', err);
+            logger.error('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
         }
