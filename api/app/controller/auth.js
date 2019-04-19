@@ -1,6 +1,7 @@
 import xss from 'xss';
 
-import { insert, findByEmail, findByUsername } from '../services/user-service';
+import { insert, findByEmail, findByUsername, updateByUsername } from '../services/user-service';
+import { comparePassword, generateHash, generateToken } from '../utils/hash';
 import logger from '../utils/logger';
 import messages from '../messages';
 
@@ -39,12 +40,11 @@ export const register = (req, res) => {
     })
     .catch(err => {
         if (err === 'm400.0' || err === 'm400.1'){
-            res.boom.badRequest(messages[err]);
+            return res.boom.badRequest(messages[err]);
         } else if (err === 'm500.0'){
-            res.boom.badImplementation(messages[err]);
+            return res.boom.badImplementation(messages[err]);
         }
     })
-
 }
 
 export const login = (req, res) => {
@@ -62,6 +62,48 @@ export const login = (req, res) => {
         password: req.body.password,
     }
 
+    findByUsername(data.username, {password: 1, tokenHash: 1, _id: 1, name: 1, avatar: 1})
+    .then(doc => {
+        comparePassword(doc.password, data.password)
+        .then(_ => {
+            let hash = '';
+            if (doc.tokenHash)
+                hash = doc.tokenHash;
+            else {
+                hash = generateHash();
+
+                let update = {
+                    tokenHash: hash
+                }
+
+                updateByUsername(update, doc.username)
+                .then(_ => {
+                    const token = generateToken(doc.username, doc.username, hash, doc.avatar, doc._id);
+
+                    return res.status(202).json({
+                        token: token
+                    })
+                })
+                .catch(_ => {
+                    return res.boom.badImplementation(messages[_]);
+                })
+            }
+        })
+        .catch(err => {
+            if (err === 'm401.0'){
+                return res.boom.unauthorized(messages[err]);
+            } else if (err === 'm500.0'){
+                return res.boom.badImplementation(messages[err]);
+            }
+        })
+    })
+    .catch(err => {
+        if (err === 'm404.0'){
+            return res.boom.notFound(messages[err]);
+        } else if (err === 'm500.0'){
+            return res.boom.badImplementation(messages[err]);
+        }
+    })
 }
 
 export const checkUsername = (req, res) => {
@@ -87,9 +129,9 @@ export const checkUsername = (req, res) => {
     })
     .catch(err => {
         if (err === 'm404.0'){
-            res.boom.notFound(messages[err]);
+            return res.boom.notFound(messages[err]);
         } else if (err === 'm500.0'){
-            res.boom.badImplementation(messages[err]);
+            return res.boom.badImplementation(messages[err]);
         }
     })
 }
@@ -117,9 +159,9 @@ export const checkEmail = (req, res) => {
     })
     .catch(err => {
         if (err === 'm404.0'){
-            res.boom.notFound(messages[err]);
+            return res.boom.notFound(messages[err]);
         } else if (err === 'm500.0'){
-            res.boom.badImplementation(messages[err]);
+            return res.boom.badImplementation(messages[err]);
         }
     })
 }

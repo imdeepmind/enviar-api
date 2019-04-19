@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import Q from 'q';
 
 import users from '../models/users';
@@ -13,12 +13,12 @@ export const findByID = (id, fields) => {
 
     users.findById(findQuery, fields, (err, doc) => {
         if (err) {
-            deferred.reject(err);
             logger.info('Database error', err);
+            deferred.reject('m500.0');
         } else if (doc) {
             deferred.resolve(doc);
         } else {
-            deferred.resolve(false);
+            deferred.resolve('m404.4');
         }
     });
 
@@ -33,8 +33,8 @@ export const findByUsername = (username, fields) => {
 
     users.findOne(findQuery, fields, (err, doc) => {
         if (err) {
-            deferred.reject(err);
             logger.info('Database error', err);
+            deferred.reject('m500.0');
         } else if (doc) {
             deferred.resolve(doc);
         } else {
@@ -53,8 +53,8 @@ export const findByEmail = (email, fields) => {
 
     users.findOne(findQuery, fields, (err, doc) => {
         if (err) {
-            deferred.reject('m500.0');
             logger.info('Database error', err);
+            deferred.reject('m500.0');
         } else if (doc) {
             deferred.resolve(doc);
         } else {
@@ -88,8 +88,8 @@ export const insert = dt => {
                 const u = users(dt);
                 u.save((err, doc) => {
                     if (err){
-                        deferred.reject('m500.0');
                         logger.info('Database error ', err);
+                        deferred.reject('m500.0');
                     } else if (doc) {
                         deferred.resolve({
                             name: doc.name,
@@ -121,17 +121,19 @@ export const updateByID = (dt, id) => {
 
     users.findOneAndUpdate(findQuery, dt, (err, doc) => {
         if (err){
-            deferred.reject(err);
+            deferred.reject('m500.0');
             logger.info('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
-        }
+        } 
+
+        deferred.reject('m404.0');
     })
 
     return deferred.promise;
 }
 
-export const updateByUsername = (dt, id) => {
+export const updateByUsername = (dt, username) => {
     const deferred = Q.defer();
     
     const findQuery = {
@@ -140,11 +142,13 @@ export const updateByUsername = (dt, id) => {
 
     users.findOneAndUpdate(findQuery, dt, (err, doc) => {
         if (err){
-            deferred.reject(err);
+            deferred.reject('m500.0');
             logger.info('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
         }
+
+        deferred.reject('m404.0');
     })
 
     return deferred.promise;
@@ -159,11 +163,13 @@ export const DeleteByID = id => {
 
     users.findOneAndRemove(findQuery, (err, doc) => {
         if (err){
-            deferred.reject(err);
+            deferred.reject('m500.0');
             logger.info('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
         }
+
+        deferred.reject('m404.0')
     })
 
     return deferred.promise;
@@ -178,11 +184,13 @@ export const DeleteByUsername = id => {
 
     users.findOneAndRemove(findQuery, (err, doc) => {
         if (err){
-            deferred.reject(err);
+            deferred.reject('m500.0');
             logger.info('Database error', err);
         } else if (doc) {
             deferred.resolve(doc);
         }
+
+        deferred.reject('m404.0')
     })
 
     return deferred.promise;

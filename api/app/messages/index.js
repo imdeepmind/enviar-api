@@ -6,7 +6,9 @@ export default {
     'm400.1' : "Email already exists",
     'm400.2' : "Validation didn't succeed",
 
+    'm401.0' : "Invalid password",
+
     'm404.0' : "User does not exist",
 
-    'm500.0' : "Something went wrong with the server"
+    'm500.0' : "Something went wrong with the server",
 }

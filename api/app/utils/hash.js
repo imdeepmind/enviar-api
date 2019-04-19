@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import Q from 'q';
+import jwt from 'jsonwebtoken';
 
 export const generateHash = () => {
     const length = 20;
@@ -17,7 +18,7 @@ export const generatePasswordHash = password => {
 
     bcrypt.hash(password, 10, (err, hash) => {
         if (err) {
-            deferred.reject(err);
+            deferred.reject('m500.0');
         } else if (hash) {
             deferred.resolve(hash);
         }
@@ -26,16 +27,29 @@ export const generatePasswordHash = password => {
     return deferred.promise;
 }
 
-export const comparePassword = (old_pas, new_pass) => {
+export const comparePassword = (old_pass, new_pass) => {
     const deferred = Q.defer();
-
-    bcrypt.compare(old_pas, new_pass, (err, hash) => {
+    bcrypt.compare(new_pass, old_pass, (err, hash) => {
         if (err) {
-            deferred.reject(err);
+            deferred.reject('m500.0');
         } else if (hash) {
             deferred.resolve(hash);
         }
+        deferred.reject('m401.0');
     })
 
     return deferred.promise;
+}
+
+export const generateToken = (name, username, hash, avatar, id) => {
+    const jwtKey = process.env.JWTTOKEN || 'gasdhqegrq78jewnjbsdf6';
+    const token = jwt.sign({
+        name: name,
+        username: username,
+        hash: hash,
+        avatar: avatar,
+        obj_id: id,
+    }, jwtKey, { expiresIn: '3d' })
+
+    return token;
 }
