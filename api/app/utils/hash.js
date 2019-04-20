@@ -50,7 +50,7 @@ export const generateToken = (name, username, hash, avatar, id) => {
         hash: hash,
         avatar: avatar,
         obj_id: id,
-    }, config.JWT_KEY, { expiresIn: '3d' })
+    }, config.JWT_TOKEN, { expiresIn: '3d' })
 
     return token;
 }

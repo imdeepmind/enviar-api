@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { createLogger, format, transports } from 'winston';
+import winston from 'winston';
 
 import config from '../config';
 
@@ -14,7 +15,7 @@ const env = config.NODE_ENV;
 const filename = path.join(logDir, 'logging.log');
 
 const logger = createLogger({
-    level: env === 'development' ? 'debug' : 'info',
+    levels: winston.config.syslog.levels,
     format: format.combine(
         format.timestamp({
             format: 'YYYY-MM-DD HH:mm:ss'
@@ -23,7 +24,7 @@ const logger = createLogger({
     ),
     transports: [
         new transports.Console({
-        level: 'info',
+        level: config.LOG_LEVEL,
         format: format.combine(
             format.colorize(),
             format.printf(

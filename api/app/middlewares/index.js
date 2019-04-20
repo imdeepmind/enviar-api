@@ -11,15 +11,14 @@ export const checkAuth = (req, res, next) => {
     const token = req.headers['authorization'];
 
     if (token){
-        jwt.verify(token, config.JWT_KEY, (err, authData) => {
+        jwt.verify(token, config.JWT_TOKEN, (err, authData) => {
             if (err){
                 logger.error('JWT Error: ', err);
                 return res.badImplementation(messages['m500.0']);
             }
-
             const findQuery = {
                 '_id' : {$eq: mongoose.Types.ObjectId(authData.obj_id)},
-                'username' : {$eq: username},
+                'username' : {$eq: authData.username},
                 'tokenHash' : {$eq: authData.hash}
             }
 
@@ -28,7 +27,7 @@ export const checkAuth = (req, res, next) => {
             userModel.findOne(findQuery, selected, (err, doc) => {
                 if (err) {
                     logger.error('Database Error: ', err);
-                    return res.badImplementation(messages['m500.0']);
+                    return res.boom.badImplementation(messages['m500.0']);
                 } else if (doc) {
                     req.authData = authData;
                     next();
@@ -41,5 +40,4 @@ export const checkAuth = (req, res, next) => {
     } else {
         return res.boom.unauthorized(messages['m401.1']);
     }
-    next();
 }
