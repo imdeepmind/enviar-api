@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken';
-import xss from 'xss';
 import mongoose from 'mongoose';
+import multer from 'multer';
+import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
 
 import config from '../config';
 import messages from '../messages';
@@ -32,7 +35,7 @@ export const checkAuth = (req, res, next) => {
                     req.authData = authData;
                     next();
                 } else {
-                    logger.debug(`User with ${username} does not exist`);
+                    logger.debug(`User with ${authData.username} does not exist`);
                     return res.boom.notFound(messages['m404.0']);
                 }
             }) 
@@ -40,4 +43,38 @@ export const checkAuth = (req, res, next) => {
     } else {
         return res.boom.unauthorized(messages['m401.1']);
     }
+}
+
+export const upload = multer({
+    dest: 'images/raw/',
+    limits: {
+        fileSize: 1024 * 1024
+    },
+    fileFilter: (req, file, callback) => {
+        let ext = path.extname(file.originalname);
+        if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+            logger.debug('Invalid image');
+            return callback(new Error('Only images are allowed'))
+        }
+        callback(null, true)
+    }
+});
+
+export const resizeImage = (req,res,next) => {
+    const path = req.file.path;
+    const name = path.split('/')[2] + '.jpg';
+
+    sharp(path)
+    .resize(200, 200, {})
+    .toFile('images/r200x200/' + name)
+    .then((_) => {
+        sharp(path)
+        .resize(48, 48, {})
+        .toFile('images/r48x48/' + name)
+        .then((_) => {
+            next();
+        })
+        next();
+    })
+    .catch(err => console.log(err));
 }

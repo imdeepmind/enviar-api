@@ -115,6 +115,6 @@ export const deleteMe = (req, res) => {
     })
 }
 
-export const UpdateDp = (req, res) => {
+export const updateDp = (req, res) => {
     
 }
