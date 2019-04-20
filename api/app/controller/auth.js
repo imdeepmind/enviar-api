@@ -155,7 +155,41 @@ export const login = (req, res) => {
 }
 
 export const checkUsername = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
 
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.info('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
+    const data = {
+        username: xss(req.params.username)
+    }
+
+    const findQuery = {
+        'username' : {$eq: data.username}
+    }
+
+    const what = {
+        _id: 1, username: 1, password: 1, tokenHash: 1, name: 1, avatar: 1
+    }
+
+    usersModel.findOne(findQuery, what, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else if (doc) {
+            logger.info(`User with username ${data.username} exist`);
+            return res.status(200).json({
+                'message' : messages['m201.1'],
+                'data': true
+            })
+        } else {
+            logger.info(`User with ${data.username} does not exist`);
+            return res.boom.notFound(messages['m404.0']);
+        }
+    })
 }
 
 export const checkEmail = (req, res) => {
@@ -165,69 +199,6 @@ export const checkEmail = (req, res) => {
 
 
 
-
-// export const login = (req, res) => {
-//     req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
-//     req.check('password', 'Invalid password').isString().isLength({min:4, max:24}).isAlphanumeric();
-
-//     const errors = req.validationErrors();
-//     if (errors) {
-//         logger.info('Validation didn\'t succeed');
-//         return res.boom.badRequest(messages['m400.2'], errors);
-//     }
-
-//     const data = {
-//         username: xss(req.body.username),
-//         password: req.body.password,
-//     }
-
-//     findByUsername(data.username, {password: 1, tokenHash: 1, _id: 1, name: 1, avatar: 1})
-//     .then(doc => {
-//         comparePassword(doc.password, data.password)
-//         .then(_ => {
-//             let hash = '';
-//             if (doc.tokenHash)
-//                 hash = doc.tokenHash;
-//             else {
-//                 hash = generateHash();
-
-//                 let update = {
-//                     tokenHash: hash
-//                 }
-
-
-//                 updateByUsername(update, data.username)
-//                 .then(_ => {
-//                     console.log(_, 'asjdh')
-//                     const token = generateToken(doc.username, doc.username, hash, doc.avatar, doc._id);
-
-//                     return res.status(202).json({
-//                         token: token
-//                     })
-//                 })
-//                 .catch(_ => {
-//                     console.log(_, 'catch')
-//                     console.log(update, doc.username)
-//                     return res.boom.badImplementation(messages[_]);
-//                 })
-//             }
-//         })
-//         .catch(err => {
-//             if (err === 'm401.0'){
-//                 return res.boom.unauthorized(messages[err]);
-//             } else if (err === 'm500.0'){
-//                 return res.boom.badImplementation(messages[err]);
-//             }
-//         })
-//     })
-//     .catch(err => {
-//         if (err === 'm404.0'){
-//             return res.boom.notFound(messages[err]);
-//         } else if (err === 'm500.0'){
-//             return res.boom.badImplementation(messages[err]);
-//         }
-//     })
-// }
 
 // export const checkUsername = (req, res) => {
 //     req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
