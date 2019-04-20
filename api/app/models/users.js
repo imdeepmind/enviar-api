@@ -86,6 +86,8 @@ const schema = mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    followee: [mongoose.Schema.Types.ObjectId],
+    followers: [mongoose.Schema.Types.ObjectId]
 });
 
 export default mongoose.model('Users', schema);

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import xss from 'xss';
+import mongoose from 'mongoose';
 
 import config from '../config';
 import messages from '../messages';
@@ -15,8 +16,16 @@ export const checkAuth = (req, res, next) => {
                 logger.error('JWT Error: ', err);
                 return res.badImplementation(messages['m500.0']);
             }
-            const username = xss(authData.username);
-            userModel.findOne({username: username}, (err, doc) => {
+
+            const findQuery = {
+                '_id' : {$eq: mongoose.Types.ObjectId(authData.obj_id)},
+                'username' : {$eq: username},
+                'tokenHash' : {$eq: authData.hash}
+            }
+
+            const selected = {_id: 1}
+
+            userModel.findOne(findQuery, selected, (err, doc) => {
                 if (err) {
                     logger.error('Database Error: ', err);
                     return res.badImplementation(messages['m500.0']);

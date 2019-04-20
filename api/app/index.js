@@ -6,10 +6,12 @@ import expressBoom from 'express-boom';
 
 import logger from './utils/logger';
 import connect from './utils/db'; 
-import auth from './routes/v1/auth';
 import messages from './messages';
 
 import config from './config/index';
+
+import auth from './routes/v1/auth';
+import me from './routes/v1/me';
 
 const app = express();
 
@@ -44,6 +46,7 @@ app.all('*', (req, res, next) => {
 
 // Auth
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/me/', me);
 
 // Handling invalid routes
 app.all('*', function (req, res) {
