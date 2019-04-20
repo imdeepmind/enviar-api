@@ -66,7 +66,8 @@ export const register = (req, res) => {
                         logger.error('Database error: ', err);
                         return res.boom.badImplementation(messages['m500.0']);
                     } else if (doc) {
-                        res.status(201).json({
+                        logger.info(`User created with username ${doc.username}`);
+                        return res.status(201).json({
                             name: doc.name,
                             username: doc.username,
                             email: doc.email,
@@ -89,7 +90,68 @@ export const register = (req, res) => {
 }
 
 export const login = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
+    req.check('password', 'Invalid password').isString().isLength({min:4, max:24}).isAlphanumeric();
 
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.info('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
+    const data = {
+        username: xss(req.body.username),
+        password: req.body.password,
+    }
+
+    const findQuery = {
+        'username' : {$eq: data.username}
+    }
+
+    const what = {
+        _id: 1, username: 1, password: 1, tokenHash: 1, name: 1, avatar: 1
+    }
+
+    usersModel.findOne(findQuery, what, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else if (doc) {
+            comparePassword(doc.password, data.password)
+            .then(h => {
+                let hash = '';
+                if (doc.tokenHash)
+                    hash = doc.tokenHash;
+                else 
+                    hash = generateHash();
+
+                const update = {
+                    tokenHash: hash
+                }
+
+                usersModel.findOneAndUpdate(findQuery, update, (err, _) => {
+                    if (err) {
+                        logger.error('Database error: ', err);
+                        return res.boom.badImplementation(messages['m500.0']);
+                    } else if (_) {
+                        logger.info('Login successful');
+                        const token = generateToken(doc.name, doc.username, hash, doc.avatar, doc._id);
+                        return res.status(202).json({
+                            token: token
+                        })
+                    }
+                })    
+            }) 
+            .catch(_ => {
+                logger.info('Wrong password');
+                return res.boom.unauthorized(messages['m401.0']);
+            })
+        } else {
+            logger.info(`User with ${data.username} does not exist`);
+            return res.boom.notFound(messages['m404.0']);
+        }
+    })
+    
 }
 
 export const checkUsername = (req, res) => {
@@ -103,50 +165,6 @@ export const checkEmail = (req, res) => {
 
 
 
-
-
-
-// export const register = (req, res) => {
-//     req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
-//     req.check('password', 'Invalid password').isString().isLength({min:4, max:24}).isAlphanumeric().equals(req.body.conformPassword);
-//     req.check('email', 'Invalid email').isString().isLength({min:4, max:255}).isEmail();
-//     req.check('name', 'Invalid name').isString().isLength({min:4, max:255});
-//     req.check('gender', 'Invalid gender').isString().isIn(['m', 'f', 'o']);
-//     req.check('dob', 'Invalid date of birth').isString().isBefore();
-//     req.check('country', 'Invalid country').isString().isLength({min:4, max:255}).isAlphanumeric();
-
-//     const errors = req.validationErrors();
-//     if (errors) {
-//         logger.info('Validation didn\'t succeed');
-//         return res.boom.badRequest(messages['m400.2'], errors);
-//     }
-        
-//     const data = {
-//         username: xss(req.body.username),
-//         password: req.body.password,
-//         email: xss(req.body.email),
-//         name: xss(req.body.name),
-//         gender: xss(req.body.gender),
-//         country: xss(req.body.country),
-//         dob: xss(req.body.dob)
-//     }
-
-//     insert(data)
-//     .then(resp => {
-//         logger.info(`User with ${data.username} username account created`);
-//         return res.status(201).json({
-//             'message' : messages['m201.0'],
-//             'data': resp
-//         })
-//     })
-//     .catch(err => {
-//         if (err === 'm400.0' || err === 'm400.1'){
-//             return res.boom.badRequest(messages[err]);
-//         } else if (err === 'm500.0'){
-//             return res.boom.badImplementation(messages[err]);
-//         }
-//     })
-// }
 
 // export const login = (req, res) => {
 //     req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
