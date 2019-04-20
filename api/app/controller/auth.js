@@ -17,7 +17,7 @@ export const register = (req, res) => {
 
     const errors = req.validationErrors();
     if (errors) {
-        logger.info('Validation didn\'t succeed');
+        logger.debug('Validation didn\'t succeed');
         return res.boom.badRequest(messages['m400.2'], errors);
     }
 
@@ -47,7 +47,7 @@ export const register = (req, res) => {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else if (doc) {
-            logger.info(`Username ${data.username} exists in the db`);
+            logger.debug(`Username ${data.username} exists in the db`);
             return res.boom.badRequest(messages['m400.0']);
         } else {
             generatePasswordHash(data.password)
@@ -61,7 +61,7 @@ export const register = (req, res) => {
                         logger.error('Database error: ', err);
                         return res.boom.badImplementation(messages['m500.0']);
                     } else if (doc) {
-                        logger.info(`User created with username ${doc.username}`);
+                        logger.debug(`User created with username ${doc.username}`);
                         return res.status(201).json({
                             name: doc.name,
                             username: doc.username,
@@ -90,7 +90,7 @@ export const login = (req, res) => {
 
     const errors = req.validationErrors();
     if (errors) {
-        logger.info('Validation didn\'t succeed');
+        logger.debug('Validation didn\'t succeed');
         return res.boom.badRequest(messages['m400.2'], errors);
     }
 
@@ -129,7 +129,7 @@ export const login = (req, res) => {
                         logger.error('Database error: ', err);
                         return res.boom.badImplementation(messages['m500.0']);
                     } else if (_) {
-                        logger.info('Login successful');
+                        logger.debug('Login successful');
                         const token = generateToken(doc.name, doc.username, hash, doc.avatar, doc._id);
                         return res.status(202).json({
                             token: token
@@ -138,11 +138,11 @@ export const login = (req, res) => {
                 })    
             }) 
             .catch(_ => {
-                logger.info('Wrong password');
+                logger.debug('Wrong password');
                 return res.boom.unauthorized(messages['m401.0']);
             })
         } else {
-            logger.info(`User with ${data.username} does not exist`);
+            logger.debug(`User with ${data.username} does not exist`);
             return res.boom.notFound(messages['m404.0']);
         }
     })
@@ -154,7 +154,7 @@ export const checkUsername = (req, res) => {
 
     const errors = req.validationErrors();
     if (errors) {
-        logger.info('Validation didn\'t succeed');
+        logger.debug('Validation didn\'t succeed');
         return res.boom.badRequest(messages['m400.2'], errors);
     }
 
@@ -175,13 +175,13 @@ export const checkUsername = (req, res) => {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else if (doc) {
-            logger.info(`User with username ${data.username} exist`);
+            logger.debug(`User with username ${data.username} exist`);
             return res.status(200).json({
                 'message' : messages['m201.1'],
                 'data': true
             })
         } else {
-            logger.info(`User with username ${data.username} does not exist`);
+            logger.debug(`User with username ${data.username} does not exist`);
             return res.boom.notFound(messages['m404.0']);
         }
     })
@@ -192,7 +192,7 @@ export const checkEmail = (req, res) => {
 
     const errors = req.validationErrors();
     if (errors) {
-        logger.info('Validation didn\'t succeed');
+        logger.debug('Validation didn\'t succeed');
         return res.boom.badRequest(messages['m400.2'], errors);
     }
 
@@ -213,13 +213,13 @@ export const checkEmail = (req, res) => {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else if (doc) {
-            logger.info(`User with email ${data.email} exist`);
+            logger.debug(`User with email ${data.email} exist`);
             return res.status(200).json({
                 'message' : messages['m201.1'],
                 'data': true
             })
         } else {
-            logger.info(`User with email ${data.email} does not exist`);
+            logger.debug(`User with email ${data.email} does not exist`);
             return res.boom.notFound(messages['m404.0']);
         }
     })

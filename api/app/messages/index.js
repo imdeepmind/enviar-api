@@ -9,6 +9,7 @@ export default {
     'm401.0' : "Invalid password",
 
     'm404.0' : "User does not exist",
+    'm404.1' : "Invalid route",
 
     'm500.0' : "Something went wrong with the server",
 }
