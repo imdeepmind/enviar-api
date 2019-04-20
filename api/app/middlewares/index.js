@@ -56,6 +56,7 @@ export const upload = multer({
             logger.debug('Invalid image');
             return callback(new Error('Only images are allowed'))
         }
+        logger.debug('Uploading image');
         callback(null, true)
     }
 });
@@ -68,13 +69,14 @@ export const resizeImage = (req,res,next) => {
     .resize(200, 200, {})
     .toFile('images/r200x200/' + name)
     .then((_) => {
+        logger.debug('Resizing image to 200x200');
         sharp(path)
         .resize(48, 48, {})
         .toFile('images/r48x48/' + name)
         .then((_) => {
+            logger.debug('Resizing image to 48x48');
             next();
         })
-        next();
     })
     .catch(err => console.log(err));
 }

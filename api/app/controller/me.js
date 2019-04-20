@@ -116,5 +116,26 @@ export const deleteMe = (req, res) => {
 }
 
 export const updateDp = (req, res) => {
-    
+    const findQuery = {
+        username: xss(req.authData.username)
+    }
+
+    const update = {
+        avatar: req.file.filename + '.jpg'
+    }
+
+    userModel.findOneAndUpdate(findQuery, update, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else if (doc) {
+            logger.debug(`Updated avatar of user with ${doc.username} username`);
+            return res.status(200).json({
+                avatar: req.file.filename + '.jpg'
+            });
+        } else {
+            logger.debug(`User with ${data.username} does not exist`);
+            return res.boom.notFound(messages['m404.0']);
+        }
+    })
 }
