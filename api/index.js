@@ -10,7 +10,7 @@ import connect from './app/utils/db';
 import auth from './app/routes/v1/auth';
 
 const app = express();
-const port = process.env.PORT || 4999;
+const port = process.env.PORT || 5111;
 const webPass = process.env.WEBPASS || ['*'];
 
 // Connect the db
