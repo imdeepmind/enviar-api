@@ -4,10 +4,10 @@ import bodyParser from 'body-parser';
 import expressValidator from 'express-validator';
 import expressBoom from 'express-boom';
 
-import logger from './app/utils/logger';
-import connect from './app/utils/db'; 
+import logger from './utils/logger';
+import connect from './utils/db'; 
 
-import auth from './app/routes/v1/auth';
+import auth from './routes/v1/auth';
 
 const app = express();
 const port = process.env.PORT || 5111;

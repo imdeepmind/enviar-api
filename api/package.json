@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -w index.js --exec \"babel-node index.js --presets env\" ",
-    "build": "babel index.js -s -D -d dist --presets env",
+    "start": "nodemon -w app --exec \"babel-node app --presets env\" ",
+    "build": "babel app -s -D -d dist --presets env",
     "preset": "npm run -s build",
-    "lint": "eslint index.js",
+    "lint": "eslint app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
