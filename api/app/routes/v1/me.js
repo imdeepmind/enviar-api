@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.get('/', checkAuth, getMe);
 
-router.put('/:id', checkAuth, updateMe);
+router.put('/', checkAuth, updateMe);
 
-router.delete('/:id', checkAuth, deleteMe);
+router.delete('/', checkAuth, deleteMe);
 
-router.put('/:id/dp', checkAuth, UpdateDp);
+router.put('/dp', checkAuth, UpdateDp);
 
 export default router;
