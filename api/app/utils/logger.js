@@ -2,13 +2,15 @@ import path from 'path';
 import fs from 'fs';
 import { createLogger, format, transports } from 'winston';
 
+import config from '../config';
+
 const logDir = 'log';
 
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
 }  
 
-const env = process.env.NODE_ENV || 'development';
+const env = config.NODE_ENV;
 const filename = path.join(logDir, 'logging.log');
 
 const logger = createLogger({

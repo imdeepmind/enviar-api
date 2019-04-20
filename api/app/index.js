@@ -6,20 +6,22 @@ import expressBoom from 'express-boom';
 
 import logger from './utils/logger';
 import connect from './utils/db'; 
-
 import auth from './routes/v1/auth';
 import messages from './messages';
 
+import config from './config/index';
+
 const app = express();
-const port = process.env.PORT || 5111;
-const webPass = process.env.WEBPASS || ['*'];
+
+// Logging the NODE_ENV
+logger.info(`The API is running as ${config.NODE_ENV.toUpperCase()}`);
 
 // Connect the db
 connect();
 
 // Use CORS
 app.use(cors({
-    allowedOrigins: [webPass]
+    allowedOrigins: [config.WEB_PASS]
 }));
 
 // Body parser
@@ -50,6 +52,6 @@ app.all('*', function (req, res) {
 });
 
 // The is running at port
-app.listen(port, () => {
-    logger.info(`The API is running at port ${port}`);
+app.listen(config.PORT, () => {
+    logger.info(`The API is running at port ${config.PORT}`);
 });

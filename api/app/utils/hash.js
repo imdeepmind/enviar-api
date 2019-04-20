@@ -2,8 +2,10 @@ import bcrypt from 'bcrypt';
 import Q from 'q';
 import jwt from 'jsonwebtoken';
 
+import config from '../config';
+
 export const generateHash = () => {
-    const length = 20;
+    const length = config.HASH_LENGTH;
     let text = "";
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -42,14 +44,13 @@ export const comparePassword = (old_pass, new_pass) => {
 }
 
 export const generateToken = (name, username, hash, avatar, id) => {
-    const jwtKey = process.env.JWTTOKEN || 'gasdhqegrq78jewnjbsdf6';
     const token = jwt.sign({
         name: name,
         username: username,
         hash: hash,
         avatar: avatar,
         obj_id: id,
-    }, jwtKey, { expiresIn: '3d' })
+    }, config.JWT_KEY, { expiresIn: '3d' })
 
     return token;
 }

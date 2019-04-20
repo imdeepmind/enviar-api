@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
-import logger from './logger';
 
-const mongoUrl = process.env.MONGO || 'mongodb://localhost:27017/enviar';
+import logger from './logger';
+import config from '../config';
 
 const connect = () => {
-    mongoose.connect(mongoUrl, {useNewUrlParser: true}, err => {
+    mongoose.connect(config.MONGODB, {useNewUrlParser: true}, err => {
         if (err){
-            logger.error(`Can not connected to the database at ${mongoUrl}`);
+            logger.error(`Can not connected to the database at ${config.MONGODB}`);
             return false;
         }
-        logger.info(`Connected to mongodb database at ${mongoUrl}`);
+        logger.info(`Connected to mongodb database at ${config.MONGODB}`);
     });
     return true;
 }
