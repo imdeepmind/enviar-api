@@ -2,11 +2,6 @@ import xss from 'xss';
 import mongoose from 'mongoose';
 
 import usersModel from '../models/users';
-
-
-
-
-import { insert, findByEmail, findByUsername, updateByUsername } from '../services/user-service';
 import { comparePassword, generateHash, generateToken, generatePasswordHash } from '../utils/hash';
 import logger from '../utils/logger';
 import messages from '../messages';
@@ -229,67 +224,3 @@ export const checkEmail = (req, res) => {
         }
     })
 }
-
-
-
-
-
-// export const checkUsername = (req, res) => {
-//     req.check('username', 'Invalid username').isString().isLength({min:4, max:24}).isAlphanumeric();
-
-//     const errors = req.validationErrors();
-//     if (errors) {
-//         logger.info('Validation didn\'t succeed');
-//         return res.boom.badRequest(messages['m400.2'], errors);
-//     }
-
-//     const data = {
-//         username: xss(req.params.username)
-//     }
-
-//     findByUsername(data.username, {_id: 1})
-//     .then(_ => {
-//         logger.info(`User with ${data.username} found`);
-//         return res.status(201).json({
-//             'message' : messages['m201.1'],
-//             'data': true
-//         })
-//     })
-//     .catch(err => {
-//         if (err === 'm404.0'){
-//             return res.boom.notFound(messages[err]);
-//         } else if (err === 'm500.0'){
-//             return res.boom.badImplementation(messages[err]);
-//         }
-//     })
-// }
-
-// export const checkEmail = (req, res) => {
-//     req.check('email', 'Invalid email').isString().isLength({min:4, max:255}).isEmail();
-
-//     const errors = req.validationErrors();
-//     if (errors) {
-//         logger.info('Validation didn\'t succeed');
-//         return res.boom.badRequest(messages['m400.2'], errors);
-//     }
-
-//     const data = {
-//         email: xss(req.params.email)
-//     }
-
-//     findByEmail(data.email, {_id: 1})
-//     .then(_ => {
-//         logger.info(`User with ${data.email} found`);
-//         return res.status(201).json({
-//             'message' : messages['m201.1'],
-//             'data': true
-//         })
-//     })
-//     .catch(err => {
-//         if (err === 'm404.0'){
-//             return res.boom.notFound(messages[err]);
-//         } else if (err === 'm500.0'){
-//             return res.boom.badImplementation(messages[err]);
-//         }
-//     })
-// }
