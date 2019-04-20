@@ -172,7 +172,7 @@ export const checkUsername = (req, res) => {
     }
 
     const what = {
-        _id: 1, username: 1, password: 1, tokenHash: 1, name: 1, avatar: 1
+        _id: 1,
     }
 
     usersModel.findOne(findQuery, what, (err, doc) => {
@@ -186,14 +186,48 @@ export const checkUsername = (req, res) => {
                 'data': true
             })
         } else {
-            logger.info(`User with ${data.username} does not exist`);
+            logger.info(`User with username ${data.username} does not exist`);
             return res.boom.notFound(messages['m404.0']);
         }
     })
 }
 
 export const checkEmail = (req, res) => {
+    req.check('email', 'Invalid email').isString().isLength({min:4, max:255}).isEmail();
 
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.info('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
+    const data = {
+        email: xss(req.params.email)
+    }
+
+    const findQuery = {
+        'email' : {$eq: data.email}
+    }
+
+    const what = {
+        _id: 1,
+    }
+
+    usersModel.findOne(findQuery, what, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else if (doc) {
+            logger.info(`User with email ${data.email} exist`);
+            return res.status(200).json({
+                'message' : messages['m201.1'],
+                'data': true
+            })
+        } else {
+            logger.info(`User with email ${data.email} does not exist`);
+            return res.boom.notFound(messages['m404.0']);
+        }
+    })
 }
 
 
