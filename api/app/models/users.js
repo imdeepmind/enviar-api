@@ -87,7 +87,8 @@ const schema = mongoose.Schema({
         default: true,
     },
     followee: [],
-    followers: []
+    followers: [],
+    blocked: []
 });
 
 export default mongoose.model('Users', schema);
