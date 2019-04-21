@@ -57,7 +57,7 @@ app.use('/api/v1/interactions/', interactions);
 // Handling invalid routes
 app.all('*', function (req, res) {
     logger.info('Invalid route');
-	return res.boom.notFound(messages['m404.0.1']);
+	return res.boom.notFound(messages['m404.1']);
 });
 
 // The is running at port
