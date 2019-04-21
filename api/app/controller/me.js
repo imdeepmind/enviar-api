@@ -21,6 +21,7 @@ export const getMe = (req, res) => {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else if (doc) {
+            logger.debug(`Returned with user ${doc.username}`);
             return res.status(200).json(doc);
         } else {
             logger.debug(`User with ${data.username} does not exist`);

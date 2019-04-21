@@ -28,7 +28,6 @@ export const updatePassword = (req, res) => {
                 const update = {
                     password: hash
                 }
-
                 userModel.findOneAndUpdate(findQuery, update, (err, doc) => {
                     if (err) {
                         logger.error('Database error: ', err);
