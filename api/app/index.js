@@ -51,7 +51,7 @@ app.all('*', (req, res, next) => {
 app.get('/', (req, res) => {
     res.status(200).json({
         'status' : 'working',
-        'message' : 'Welcome dude to the enviar'
+        'message' : 'Welcome dude to enviar'
     })
 })
 
@@ -72,3 +72,5 @@ app.all('*', (req, res) => {
 app.listen(config.PORT, () => {
     logger.info(`The API is running at port ${config.PORT}`);
 });
+
+export default app;
