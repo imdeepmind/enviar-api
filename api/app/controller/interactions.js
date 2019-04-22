@@ -4,7 +4,7 @@ import userModel from '../models/users';
 import logger from '../utils/logger';
 import messages from '../messages';
 
-export const follow2 = (req, res) => {
+export const follow = (req, res) => {
     const me = xss(req.authData.username);
     const target = xss(req.params.username);
 

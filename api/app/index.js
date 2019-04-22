@@ -47,7 +47,7 @@ app.all('*', (req, res, next) => {
     return next();
 });
 
-// Auth
+// Routes
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/me/', me);
 app.use('/api/v1/settings', settings);
@@ -55,8 +55,8 @@ app.use('/api/v1/users/', users);
 app.use('/api/v1/interactions/', interactions);
 
 // Handling invalid routes
-app.all('*', function (req, res) {
-    logger.info('Invalid route');
+app.all('*', (req, res) => {
+    logger.debug('Invalid route');
 	return res.boom.notFound(messages['m404.1']);
 });
 

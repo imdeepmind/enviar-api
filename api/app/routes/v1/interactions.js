@@ -1,11 +1,11 @@
 import express from 'express';
 
 import { checkAuth } from '../../middlewares';
-import { follow2, unfollow, block, unblock } from '../../controller/interactions';
+import { follow, unfollow, block, unblock } from '../../controller/interactions';
 
 const router = express.Router();
 
-router.put('/follow/:username', checkAuth, follow2);
+router.put('/follow/:username', checkAuth, follow);
 
 router.put('/unfollow/:username', checkAuth, unfollow);
 
