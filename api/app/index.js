@@ -47,6 +47,14 @@ app.all('*', (req, res, next) => {
     return next();
 });
 
+// Index route
+app.get('/', (req, res) => {
+    res.status(200).json({
+        'status' : 'working',
+        'message' : 'Welcome dude to the enviar'
+    })
+})
+
 // Routes
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/me/', me);
