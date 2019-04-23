@@ -34,7 +34,9 @@ export const updateMe = (req, res) => {
     req.check('email', 'Invalid email').isString().isLength({min:4, max:255}).isEmail().optional();
     req.check('name', 'Invalid name').isString().isLength({min:4, max:255}).optional();
     req.check('gender', 'Invalid gender').isString().isIn(['m', 'f', 'o']).optional();
-    req.check('dob', 'Invalid date of birth').isString().isBefore().optional();
+    req.check('dob', 'Invalid date of birth').isString().isBefore().optional().custom(date => {
+        return date.match(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
+    });
     req.check('country', 'Invalid country').isString().isLength({min:4, max:255}).isAlphanumeric().optional();
     req.check('city', 'Invalid city').isString().isLength({min:4, max:255}).isAlphanumeric().optional();
     req.check('state', 'Invalid state').isString().isLength({min:4, max:255}).isAlphanumeric().optional();
