@@ -178,7 +178,7 @@ export const checkUsername = (req, res) => {
             return res.boom.badImplementation(messages['m500.0']);
         } else if (doc) {
             logger.debug(`User with username ${data.username} exist`);
-            return res.status(200).jjson({
+            return res.status(200).json({
                 'message' : messages['m201.1'],
                 'data': true
             })

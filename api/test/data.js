@@ -26,7 +26,7 @@ export default {
                 "password" : "password",
                 "name" : "Abhishek Chatterjee",
                 "dob" : "1997-01-17",
-                "email" : "infinityatme1@gmail.com",
+                "email" : "infinityatme@gmail.com",
                 "country" : "India",
                 "gender" : "m",
                 "conformPassword" : "password"
@@ -41,6 +41,24 @@ export default {
                 "gender" : "m",
                 "conformPassword" : "password"
             }
+        ],
+        'login': [
+            {
+                'username' : 'imdeepmind',
+                'password' : 'password'
+            },
+            {
+                'username3' : 'imdeepmind',
+                'password' : 'password'
+            },
+            {
+                'username' : '1234567',
+                'password' : 'password'
+            },  
+            {
+                'username' : 'imdeepmind',
+                'password' : 'password22'
+            },           
         ]
     }
 }
