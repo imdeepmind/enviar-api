@@ -28,3 +28,10 @@ PUT /interactions/unfollow/:username/
 PUT /interactions/block/:username/
 PUT /interactions/unblock/:username/
 
+#POSTS
+
+GET /posts/
+GET /posts/:id
+POST /posts/
+PUT /posts/:id
+DELETE /posts/:id
