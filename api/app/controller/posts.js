@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 import postModel from '../models/posts';
 import logger from '../utils/logger';
-import { Mongoose } from 'mongoose';
+import messages from '../messages';
 
 export const getPosts = (req, res) => {
     let page = xss(req.query.page);
@@ -13,11 +13,11 @@ export const getPosts = (req, res) => {
     if (!limit || limit <= 0) limit = 10;
 
     const selectedField = {
-        author: 1, content: 1, caption: 1, createdAt: 1, updatedAt, _id: 1
+        author: 1, content: 1, caption: 1, createdAt: 1, updatedAt: 1, _id: 1
     }
 
     postModel.find({}, selectedField, {limit: limit, skip: page * limit}, (err, doc) => {
-        if (errors) {
+        if (err) {
             logger.debug('Validation didn\'t succeed');
             return res.boom.badRequest(messages['m400.2'], errors);
         } else {
@@ -33,11 +33,11 @@ export const getPotsById = (req, res) => {
     }
 
     const selectedField = {
-        author: 1, content: 1, caption: 1, createdAt: 1, updatedAt, _id: 1
+        author: 1, content: 1, caption: 1, createdAt: 1, updatedAt: 1, _id: 1
     }
 
     postModel.findOne(findQuery, selectedField, (err, doc) => {
-        if (errors) {
+        if (err) {
             logger.debug('Validation didn\'t succeed');
             return res.boom.badRequest(messages['m400.2'], errors);
         } else {
@@ -48,8 +48,16 @@ export const getPotsById = (req, res) => {
 }
 
 export const addPost = (req, res) => {
+    req.check('caption', 'Invalid caption').isString().isLength({min:4, max:255}).optional();
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     const data = {
-        _id: Mongoose.Types.ObjectId,
+        _id:  new mongoose.Types.ObjectId(),
         author: xss(req.authData.username),
         content: req.file.filename + '.jpg',
         caption: xss(req.body.caption)
@@ -76,6 +84,14 @@ export const addPost = (req, res) => {
 }
 
 export const editPost = (req, res) => {
+    req.check('caption', 'Invalid caption').isString().isLength({min:4, max:255});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     const findQuery = {
         _id: {$eq: mongoose.Types.ObjectId(req.params.id)}
     }
@@ -109,7 +125,7 @@ export const deletePost = (req, res) => {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else if (doc){
-            return res.status(201).json({
+            return res.status(204).json({
                 deleted: req.params.id
             });
         } else {

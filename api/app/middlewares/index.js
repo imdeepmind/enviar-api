@@ -61,6 +61,22 @@ export const upload = multer({
     }
 });
 
+export const uploadPostImage = multer({
+    dest: 'posts/raw/',
+    limits: {
+        fileSize: 1024 * 1024
+    },
+    fileFilter: (req, file, callback) => {
+        let ext = path.extname(file.originalname);
+        if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+            logger.debug('Invalid image');
+            return callback(new Error('Only images are allowed'))
+        }
+        logger.debug('Uploading image');
+        callback(null, true)
+    }
+});
+
 export const resizeImage = (req,res,next) => {
     const path = req.file.path;
     const name = path.split('/')[2] + '.jpg';
@@ -77,6 +93,20 @@ export const resizeImage = (req,res,next) => {
             logger.debug('Resizing image to 48x48');
             next();
         })
+    })
+    .catch(err => console.log(err));
+}
+
+export const resizePostImage = (req,res,next) => {
+    const path = req.file.path;
+    const name = path.split('/')[2] + '.jpg';
+
+    sharp(path)
+    .resize(500, 500, {})
+    .toFile('posts/r500x500/' + name)
+    .then((_) => {
+        logger.debug('Resizing image to 500x500');
+        next();
     })
     .catch(err => console.log(err));
 }
