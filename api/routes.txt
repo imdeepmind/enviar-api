@@ -26,3 +26,5 @@ GET /user/:username/
 PUT /interactions/follow/:username/
 PUT /interactions/unfollow/:username/
 PUT /interactions/block/:username/
+PUT /interactions/unblock/:username/
+
