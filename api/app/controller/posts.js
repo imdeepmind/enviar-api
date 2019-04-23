@@ -59,7 +59,7 @@ export const addPost = (req, res) => {
     const data = {
         _id:  new mongoose.Types.ObjectId(),
         author: xss(req.authData.username),
-        content: req.file.filename + '.jpg',
+        content: req.file.filename,
         caption: xss(req.body.caption)
     }
 

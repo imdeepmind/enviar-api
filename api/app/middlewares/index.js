@@ -79,7 +79,7 @@ export const uploadPostImage = multer({
 
 export const resizeImage = (req,res,next) => {
     const path = req.file.path;
-    const name = path.split('/')[2] + '.jpg';
+    const name = path.split('/')[2];
 
     sharp(path)
     .resize(200, 200, {})
@@ -99,7 +99,7 @@ export const resizeImage = (req,res,next) => {
 
 export const resizePostImage = (req,res,next) => {
     const path = req.file.path;
-    const name = path.split('/')[2] + '.jpg';
+    const name = path.split('/')[2];
 
     sharp(path)
     .resize(500, 500, {})

@@ -124,7 +124,7 @@ export const updateDp = (req, res) => {
     }
 
     const update = {
-        avatar: req.file.filename + '.jpg'
+        avatar: req.file.filename
     }
 
     userModel.findOneAndUpdate(findQuery, update, (err, doc) => {
