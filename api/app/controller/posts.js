@@ -19,7 +19,7 @@ export const getPosts = (req, res) => {
     postModel.find({}, selectedField, {limit: limit, skip: page * limit}, (err, doc) => {
         if (err) {
             logger.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(messages['m400.2'], errors);
+            return res.boom.badRequest(messages['m400.2'], err);
         } else {
             logger.debug('Returning some posts');
             return res.status(200).json(doc);
@@ -39,7 +39,7 @@ export const getPotsById = (req, res) => {
     postModel.findOne(findQuery, selectedField, (err, doc) => {
         if (err) {
             logger.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(messages['m400.2'], errors);
+            return res.boom.badRequest(messages['m400.2'], err);
         } else {
             logger.debug('Returning some posts');
             return res.status(200).json(doc);

@@ -11,7 +11,6 @@ if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
 }  
 
-const env = config.NODE_ENV;
 const filename = path.join(logDir, 'logging.log');
 
 const logger = createLogger({

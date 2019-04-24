@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import multer from 'multer';
-import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 
@@ -94,7 +93,9 @@ export const resizeImage = (req,res,next) => {
             next();
         })
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        logger.error('Error in resizing the image: ', err);
+    });
 }
 
 export const resizePostImage = (req,res,next) => {
@@ -108,5 +109,7 @@ export const resizePostImage = (req,res,next) => {
         logger.debug('Resizing image to 500x500');
         next();
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        logger.error('Error in resizing the image: ', err);
+    });
 }

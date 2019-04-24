@@ -1,6 +1,9 @@
 import xss from 'xss';
 
 import chatModel from '../models/chats';
+import logger from '../utils/logger';
+import messages from '../messages';
+
 
 export const getChats = (req, res) => {
     let page = xss(req.query.page);
@@ -24,7 +27,7 @@ export const getChats = (req, res) => {
     chatModel.find(findQuery, selectedField, {limit: limit, skip: page * limit}, (err, doc) => {
         if (err) {
             logger.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(messages['m400.2'], errors);
+            return res.boom.badRequest(messages['m400.2'], err);
         } else {
             logger.debug('Returning some chats');
             return res.status(200).json(doc);

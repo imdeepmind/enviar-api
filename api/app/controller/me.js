@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import xss from 'xss';
 
 import userModel from '../models/users';
@@ -24,7 +23,7 @@ export const getMe = (req, res) => {
             logger.debug(`Returned with user ${doc.username}`);
             return res.status(200).json(doc);
         } else {
-            logger.debug(`User with ${data.username} does not exist`);
+            logger.debug(`User with ${req.authData.username} does not exist`);
             return res.boom.notFound(messages['m404.0']);
         }
     })
@@ -81,16 +80,14 @@ export const updateMe = (req, res) => {
                 country: doc.country,
                 dob: doc.dob,
                 gender: doc.gender,
-                email: doc.email,
                 city: doc.city,
                 state: doc.state,
-                country: doc.country,
                 status: doc.status,
                 bio: doc.bio,
                 avatar: doc.avatar
             });
         } else {
-            logger.debug(`User with ${data.username} does not exist`);
+            logger.debug(`User with ${req.authData.username} does not exist`);
             return res.boom.notFound(messages['m404.0']);
         }
     })
@@ -107,12 +104,12 @@ export const deleteMe = (req, res) => {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else if (doc) {
-            logger.debug(`Deleted user with username ${data.username}`);
+            logger.debug(`Deleted user with username ${req.authData.username}`);
             return res.status(200).json({
                 username: req.authData.username
             });
         } else {
-            logger.debug(`User with ${data.username} does not exist`);
+            logger.debug(`User with ${req.authData.username} does not exist`);
             return res.boom.notFound(messages['m404.0']);
         }
     })
@@ -137,7 +134,7 @@ export const updateDp = (req, res) => {
                 avatar: req.file.filename + '.jpg'
             });
         } else {
-            logger.debug(`User with ${data.username} does not exist`);
+            logger.debug(`User with ${req.authData.username} does not exist`);
             return res.boom.notFound(messages['m404.0']);
         }
     })

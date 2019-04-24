@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -w app --exec \"babel-node app --presets env\" ",
-    "build": "babel app -s -D -d dist --presets env",
+    "start": "cross-env NODE_ENV=development nodemon -w app --exec \"babel-node app --presets env\" ",
+    "build": "cross-env NODE_ENV=production babel app -s -D -d dist --presets env",
     "preset": "npm run -s build",
     "lint": "eslint app",
-    "test": "mocha --require babel-register"
+    "test": "cross-env NODE_ENV=test mocha --require babel-register"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
+    "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.18.11"

@@ -41,21 +41,19 @@ export const updatePassword = (req, res) => {
                             country: doc.country,
                             dob: doc.dob,
                             gender: doc.gender,
-                            email: doc.email,
                             city: doc.city,
                             state: doc.state,
-                            country: doc.country,
                             status: doc.status,
                             bio: doc.bio,
                             avatar: doc.avatar
                         });
                     } else {
-                        logger.debug(`User with ${data.username} does not exist`);
+                        logger.debug(`User with ${req.authData.username} does not exist`);
                         return res.boom.notFound(messages['m404.0']);
                     }
                 })
             })
-            .catch(_ => {
+            .catch(err => {
                 logger.error('JWT Error: ', err);
                 return res.badImplementation(messages['m500.0']);
             })
@@ -70,7 +68,7 @@ export const updatePassword = (req, res) => {
             }
         })
     })
-    .catch(_ => {
+    .catch(err => {
         logger.error('JWT Error: ', err);
         return res.badImplementation(messages['m500.0']);
     })
