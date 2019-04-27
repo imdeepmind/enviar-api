@@ -29,8 +29,8 @@ export const getChats = (req, res) => {
 
     chatModel.find(findQuery, selectedField, {limit: limit, skip: page * limit}, (err, doc) => {
         if (err) {
-            logger.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(messages['m400.2'], err);
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
         } else {
             logger.debug('Returning some chats');
             return res.status(200).json(doc);
@@ -53,8 +53,8 @@ export const getChat = (req, res) => {
 
     chatModel.find(findQuery, selectedField, (err, doc) => {
         if (err) {
-            logger.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(messages['m400.2'], err);
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
         } else {
             logger.debug('Returning some chats');
             return res.status(200).json(doc);
@@ -63,7 +63,7 @@ export const getChat = (req, res) => {
 }
 
 export const postChat = (req, res) => {
-    req.check('status', 'Invalid status').isString().isLength({min:4, max:255});
+    req.check('message', 'Invalid message').isString().isLength({min:4, max:255});
 
     const errors = req.validationErrors();
     if (errors) {
@@ -79,20 +79,53 @@ export const postChat = (req, res) => {
 
     userModel.findOne(findQuery, selectedField, (err, doc) => {
         if (err) {
-            logger.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(messages['m400.2'], err);
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
         } else {
             if (doc.blocked.includes(req.params.username)){
-
+                logger.debug('user blocked');
+                return res.boom.badRequest(messages['m400.3']);
             } else {
-                const findQuery2 = {
-                    
-                }
+                const newChat = new chatModel({
+                    _id: new mongoose.Types.ObjectId(),
+                    author: xss(req.authData.username),
+                    to: xss(req.params.username),
+                    message: xss(req.body.message)
+                })
+
+                newChat.save((err, doc) => {
+                    if (err) {
+                        logger.error('Database error: ', err);
+                        return res.boom.badImplementation(messages['m500.0']);
+                    } else {
+                        res.status(201).json({
+                            author: xss(req.authData.username),
+                            to: xss(req.params.username),
+                            message: xss(req.body.message)
+                        })
+                    }
+                })
             }
         }
     })
 }
 
 export const deleteChat = (req, res) => {
+    const findQuery = {
+        _id: new mongoose.Schema.Types.ObjectId(req.params.id)
+    }
 
+    chatModel.findOneAndRemove(findQuery, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else if (doc) {
+            return res.status(200).json({
+                id: req.params.id
+            })
+        } else {
+            logger.debug('message don\'t exist');
+            return res.boom.notFound(messages['m404.m404.2']);
+        }
+    })
 }
