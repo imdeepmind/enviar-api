@@ -8,7 +8,8 @@
     "build": "cross-env NODE_ENV=production babel app -s -D -d dist --presets env",
     "preset": "npm run -s build",
     "lint": "eslint app",
-    "test": "cross-env NODE_ENV=test mocha --require babel-register"
+    "test": "cross-env NODE_ENV=test mocha --require babel-polyfill --require babel-register",
+    "coverage" : "cross-env NODE_ENV=test nyc mocha --require babel-polyfill --require babel-register"
   },
   "keywords": [],
   "author": "",
@@ -17,13 +18,15 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "mocha": "^6.1.4",
-    "nodemon": "^1.18.11"
+    "nodemon": "^1.18.11",
+    "nyc": "^14.0.0"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
