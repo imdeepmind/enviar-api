@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 
 import userModel from '../app/models/users';
 
-import testData from './sampleData/data';
+import testData from './sampleData/auth.data.test';
 
 import app from '../app/index';
 
