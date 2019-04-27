@@ -12,7 +12,7 @@
     "preset": "npm run -s build",
     "lint": "eslint app",
     "test": "cross-env NODE_ENV=test mocha --require babel-polyfill --require babel-register",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha test/*.js"
+    "coverage": "cross-env NODE_ENV=test nyc mocha"
   },
   "keywords": [],
   "author": "",

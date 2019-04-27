@@ -35,12 +35,12 @@ export const updateMe = (req, res) => {
     req.check('gender', 'Invalid gender').isString().isIn(['m', 'f', 'o']).optional();
     req.check('dob', 'Invalid date of birth').isString().isBefore().optional().custom(date => {
         return date.match(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
-    });
-    req.check('country', 'Invalid country').isString().isLength({min:4, max:255}).isAlphanumeric().optional();
-    req.check('city', 'Invalid city').isString().isLength({min:4, max:255}).isAlphanumeric().optional();
-    req.check('state', 'Invalid state').isString().isLength({min:4, max:255}).isAlphanumeric().optional();
-    req.check('status', 'Invalid status').isString().isLength({min:4, max:255}).isAlphanumeric().optional();
-    req.check('bio', 'Invalid bio').isString().isLength({min:24, max:1024}).isAlphanumeric().optional();
+    }).optional();
+    req.check('country', 'Invalid country').isString().isLength({min:4, max:255}).optional();
+    req.check('city', 'Invalid city').isString().isLength({min:4, max:255}).optional();
+    req.check('state', 'Invalid state').isString().isLength({min:4, max:255}).optional();
+    req.check('status', 'Invalid status').isString().isLength({min:4, max:255}).optional();
+    req.check('bio', 'Invalid bio').isString().isLength({min:24, max:1024}).optional();
     
     const errors = req.validationErrors();
     if (errors) {
@@ -105,9 +105,7 @@ export const deleteMe = (req, res) => {
             return res.boom.badImplementation(messages['m500.0']);
         } else if (doc) {
             logger.debug(`Deleted user with username ${req.authData.username}`);
-            return res.status(200).json({
-                username: req.authData.username
-            });
+            return res.status(204).json({});
         } else {
             logger.debug(`User with ${req.authData.username} does not exist`);
             return res.boom.notFound(messages['m404.0']);
