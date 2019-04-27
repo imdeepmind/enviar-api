@@ -35,3 +35,10 @@ GET /posts/:id
 POST /posts/
 PUT /posts/:id
 DELETE /posts/:id
+
+#CHATS
+
+GET /chats/
+GET /chats/:id/
+POST /chats/:username/
+DELETE /chats/:id/

@@ -112,7 +112,8 @@ export const postChat = (req, res) => {
 
 export const deleteChat = (req, res) => {
     const findQuery = {
-        _id: new mongoose.Schema.Types.ObjectId(req.params.id)
+        _id: new mongoose.Schema.Types.ObjectId(req.params.id),
+        author: {$eq: req.authData.username}
     }
 
     chatModel.findOneAndRemove(findQuery, (err, doc) => {
