@@ -12,13 +12,45 @@ export const getPosts = (req, res) => {
     if (!page || page < 0) page = 0;
     if (!limit || limit <= 0) limit = 10;
 
-    console.log({limit: limit, skip: page * limit})
-
-    const selectedField = {
-        author: 1, content: 1, caption: 1, createdAt: 1, updatedAt: 1, _id: 1
-    }
-
-    postModel.find({}, selectedField, {limit: limit, skip: page * limit}, (err, doc) => {
+    postModel.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField : 'author',
+                foreignField : 'username',
+                as: 'author'
+            }
+        }, 
+        {
+            $project: {
+                '_id' : 1,
+                'content' : 1,
+                'caption' : 1,
+                'createdAt': 1, 
+                'updatedAt': 1,
+                'author._id' : 1,
+                "author.username" : 1,
+                'author.avatar' : 1
+            }
+        },
+        {
+            $match: {
+                $or: [
+                    {"author.followers" : {$eq: req.authData.username}},
+                    {"author.username" : {$eq: req.authData.username}}
+                ]
+            }
+        },
+        {
+            $sort: {"updatedAt": -1}
+        },
+        {
+            $skip: page * limit
+        },
+        {
+            $limit: limit
+        },
+    ]).exec((err, doc) => {
         if (err) {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
