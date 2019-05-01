@@ -17,6 +17,7 @@ import users from './routes/v1/users';
 import interactions from './routes/v1/interactions';
 import posts from './routes/v1/posts';
 import chats from './routes/v1/chats';
+import resource from './routes/v1/resource';
 
 const app = express();
 
@@ -65,6 +66,7 @@ app.use('/api/v1/users/', users);
 app.use('/api/v1/interactions/', interactions);
 app.use('/api/v1/posts/', posts);
 app.use('/api/v1/chats', chats);
+app.use('/api/v1/resource/', resource);
 
 // Handling invalid routes
 app.all('*', (req, res) => {

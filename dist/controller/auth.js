@@ -30,15 +30,15 @@ var _messages2 = _interopRequireDefault(_messages);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var register = exports.register = function register(req, res) {
-    req.check('username', 'Invalid username').isString().isLength({ min: 4, max: 24 }).isAlphanumeric();
-    req.check('password', 'Invalid password').isString().isLength({ min: 4, max: 24 }).isAlphanumeric().equals(req.body.conformPassword);
+    req.check('username', 'Invalid username').isString().isLength({ min: 4, max: 24 });
+    req.check('password', 'Invalid password').isString().isLength({ min: 4, max: 24 }).equals(req.body.conformPassword);
     req.check('email', 'Invalid email').isString().isLength({ min: 4, max: 255 }).isEmail();
     req.check('name', 'Invalid name').isString().isLength({ min: 4, max: 255 });
     req.check('gender', 'Invalid gender').isString().isIn(['m', 'f', 'o']);
     req.check('dob', 'Invalid date of birth').isString().isBefore().custom(function (date) {
         return date.match(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
     });
-    req.check('country', 'Invalid country').isString().isLength({ min: 4, max: 255 }).isAlphanumeric();
+    req.check('country', 'Invalid country').isString().isLength({ min: 4, max: 255 });
 
     var errors = req.validationErrors();
     if (errors) {

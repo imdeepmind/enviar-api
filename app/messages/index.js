@@ -13,6 +13,7 @@ export default {
     'm404.0' : "User does not exist",
     'm404.1' : "Invalid route",
     'm404.2' : "Message does not exist",
+    'm404.3' : "Resource does not exist",
 
     'm500.0' : "Something went wrong with the server",
 }
