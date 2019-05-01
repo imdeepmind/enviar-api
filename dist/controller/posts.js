@@ -28,11 +28,13 @@ var _messages2 = _interopRequireDefault(_messages);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var getPosts = exports.getPosts = function getPosts(req, res) {
-    var page = (0, _xss2.default)(req.query.page);
-    var limit = (0, _xss2.default)(req.query.limit);
+    var page = Number((0, _xss2.default)(req.query.page));
+    var limit = Number((0, _xss2.default)(req.query.limit));
 
     if (!page || page < 0) page = 0;
     if (!limit || limit <= 0) limit = 10;
+
+    console.log({ limit: limit, skip: page * limit });
 
     var selectedField = {
         author: 1, content: 1, caption: 1, createdAt: 1, updatedAt: 1, _id: 1
@@ -40,8 +42,8 @@ var getPosts = exports.getPosts = function getPosts(req, res) {
 
     _posts2.default.find({}, selectedField, { limit: limit, skip: page * limit }, function (err, doc) {
         if (err) {
-            _logger2.default.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(_messages2.default['m400.2'], err);
+            _logger2.default.error('Database error: ', err);
+            return res.boom.badImplementation(_messages2.default['m500.0']);
         } else {
             _logger2.default.debug('Returning some posts');
             return res.status(200).json(doc);
@@ -60,8 +62,8 @@ var getPotsById = exports.getPotsById = function getPotsById(req, res) {
 
     _posts2.default.findOne(findQuery, selectedField, function (err, doc) {
         if (err) {
-            _logger2.default.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(_messages2.default['m400.2'], err);
+            _logger2.default.error('Database error: ', err);
+            return res.boom.badImplementation(_messages2.default['m500.0']);
         } else {
             _logger2.default.debug('Returning some posts');
             return res.status(200).json(doc);

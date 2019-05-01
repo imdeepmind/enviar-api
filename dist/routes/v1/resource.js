@@ -16,7 +16,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var router = _express2.default.Router();
 
-router.get('/:type/:file/:resolution', _middlewares.checkAuth, _resource.getImage);
+router.get('/:type/:file/:resolution', _resource.getImage);
 
 exports.default = router;
 //# sourceMappingURL=resource.js.map

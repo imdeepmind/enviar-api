@@ -16,7 +16,6 @@ var schema = _mongoose2.default.Schema({
         type: String,
         required: true,
         index: true,
-        unique: true,
         min: 4,
         max: 24,
         trim: true

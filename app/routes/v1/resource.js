@@ -5,6 +5,6 @@ import { getImage  } from '../../controller/resource';
 
 const router = express.Router();
 
-router.get('/:type/:file/:resolution', checkAuth, getImage);
+router.get('/:type/:file/:resolution', getImage);
 
 export default router;

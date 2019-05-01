@@ -74,6 +74,7 @@ var checkAuth = exports.checkAuth = function checkAuth(req, res, next) {
             });
         });
     } else {
+        _logger2.default.debug('Does not have any token');
         return res.boom.unauthorized(_messages2.default['m401.1']);
     }
 };
