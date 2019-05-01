@@ -68,6 +68,10 @@ var _chats = require('./routes/v1/chats');
 
 var _chats2 = _interopRequireDefault(_chats);
 
+var _resource = require('./routes/v1/resource');
+
+var _resource2 = _interopRequireDefault(_resource);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
@@ -117,6 +121,7 @@ app.use('/api/v1/users/', _users2.default);
 app.use('/api/v1/interactions/', _interactions2.default);
 app.use('/api/v1/posts/', _posts2.default);
 app.use('/api/v1/chats', _chats2.default);
+app.use('/api/v1/resource/', _resource2.default);
 
 // Handling invalid routes
 app.all('*', function (req, res) {

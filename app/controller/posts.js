@@ -6,11 +6,13 @@ import logger from '../utils/logger';
 import messages from '../messages';
 
 export const getPosts = (req, res) => {
-    let page = xss(req.query.page);
-    let limit = xss(req.query.limit);
+    let page = Number(xss(req.query.page));
+    let limit = Number(xss(req.query.limit));
     
     if (!page || page < 0) page = 0;
     if (!limit || limit <= 0) limit = 10;
+
+    console.log({limit: limit, skip: page * limit})
 
     const selectedField = {
         author: 1, content: 1, caption: 1, createdAt: 1, updatedAt: 1, _id: 1
@@ -18,8 +20,8 @@ export const getPosts = (req, res) => {
 
     postModel.find({}, selectedField, {limit: limit, skip: page * limit}, (err, doc) => {
         if (err) {
-            logger.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(messages['m400.2'], err);
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
         } else {
             logger.debug('Returning some posts');
             return res.status(200).json(doc);
@@ -38,8 +40,8 @@ export const getPotsById = (req, res) => {
 
     postModel.findOne(findQuery, selectedField, (err, doc) => {
         if (err) {
-            logger.debug('Validation didn\'t succeed');
-            return res.boom.badRequest(messages['m400.2'], err);
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
         } else {
             logger.debug('Returning some posts');
             return res.status(200).json(doc);

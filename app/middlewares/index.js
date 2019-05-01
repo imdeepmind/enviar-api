@@ -11,7 +11,7 @@ import logger from '../utils/logger';
 
 export const checkAuth = (req, res, next) => {
     const token = req.headers['authorization'];
-
+    
     if (token){
         jwt.verify(token, config.JWT_TOKEN, (err, authData) => {
             if (err){
@@ -40,6 +40,7 @@ export const checkAuth = (req, res, next) => {
             }) 
         });
     } else {
+        logger.debug(`Does not have any token`);
         return res.boom.unauthorized(messages['m401.1']);
     }
 }
