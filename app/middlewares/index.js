@@ -34,8 +34,8 @@ export const checkAuth = (req, res, next) => {
                     req.authData = authData;
                     next();
                 } else {
-                    logger.debug(`User with ${authData.username} does not exist`);
-                    return res.boom.notFound(messages['m404.0']);
+                    logger.debug(`Unauthorized: User with ${authData.username} does not exist`);
+                    return res.boom.unauthorized(messages['m401.1']);
                 }
             }) 
         });
