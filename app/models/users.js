@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate';
 
 const schema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -91,5 +92,7 @@ const schema = mongoose.Schema({
     followers: [],
     blocked: []
 });
+
+schema.plugin(mongoosePaginate);
 
 export default mongoose.model('Users', schema);

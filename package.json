@@ -41,6 +41,7 @@
     "express-validator": "^5.3.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.1",
+    "mongoose-paginate": "^5.0.3",
     "multer": "^1.4.1",
     "pm2": "^3.5.0",
     "q": "^1.5.1",
