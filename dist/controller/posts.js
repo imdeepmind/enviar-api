@@ -34,13 +34,35 @@ var getPosts = exports.getPosts = function getPosts(req, res) {
     if (!page || page < 0) page = 0;
     if (!limit || limit <= 0) limit = 10;
 
-    console.log({ limit: limit, skip: page * limit });
-
-    var selectedField = {
-        author: 1, content: 1, caption: 1, createdAt: 1, updatedAt: 1, _id: 1
-    };
-
-    _posts2.default.find({}, selectedField, { limit: limit, skip: page * limit }, function (err, doc) {
+    _posts2.default.aggregate([{
+        $lookup: {
+            from: 'users',
+            localField: 'author',
+            foreignField: 'username',
+            as: 'author'
+        }
+    }, {
+        $project: {
+            '_id': 1,
+            'content': 1,
+            'caption': 1,
+            'createdAt': 1,
+            'updatedAt': 1,
+            'author._id': 1,
+            "author.username": 1,
+            'author.avatar': 1
+        }
+    }, {
+        $match: {
+            $or: [{ "author.followers": { $eq: req.authData.username } }, { "author.username": { $eq: req.authData.username } }]
+        }
+    }, {
+        $sort: { "updatedAt": -1 }
+    }, {
+        $skip: page * limit
+    }, {
+        $limit: limit
+    }]).exec(function (err, doc) {
         if (err) {
             _logger2.default.error('Database error: ', err);
             return res.boom.badImplementation(_messages2.default['m500.0']);

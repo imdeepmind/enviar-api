@@ -11,7 +11,7 @@ export const getOne = (req, res) => {
 
     const selectedField = {
         username: 1, name: 1, email: 1, city: 1, state: 1, country: 1,
-        gender: 1, dob: 1, avatar: 1, status: 1, bio: 1, 
+        gender: 1, dob: 1, avatar: 1, status: 1, bio: 1,
         createdAt: 1, updatedAt: 1, isActive: 1,  followee: 1, followers: 1
     }
 
@@ -30,7 +30,7 @@ export const getOne = (req, res) => {
                 const findQuery = {
                     username: {$eq: xss(req.params.username)},
                 }
-    
+
                 userModel.findOne(findQuery, selectedField, (err, doc) => {
                     if (err) {
                         logger.error('Database error: ', err);
@@ -44,7 +44,7 @@ export const getOne = (req, res) => {
                             data['isFollowers'] = true;
                         else
                             data['isFollowers'] = false;
-                        
+
                         if (doc1.followee.includes(req.authData.username))
                             data.isFollowee = true;
                         else
@@ -70,9 +70,9 @@ export const getOne = (req, res) => {
 }
 
 export const getAll = (req, res) => {
-    let page = xss(req.query.page);
-    let limit = xss(req.query.limit);
-    
+    let page = Number(xss(req.query.page));
+    let limit = Number(xss(req.query.limit));
+
     if (!page || page < 0) page = 0;
     if (!limit || limit <= 0) limit = 10;
 
@@ -81,8 +81,7 @@ export const getAll = (req, res) => {
     }
 
     const selectedField = {
-        username: 1, name: 1, email: 1, city: 1, state: 1, country: 1,
-        gender: 1, dob: 1, avatar: 1, status: 1, bio: 1, 
+        username: 1, name: 1, country: 1, gender: 1, dob: 1, avatar: 1, status: 1,
         createdAt: 1, updatedAt: 1, isActive: 1,  followee: 1, followers: 1
     }
 
@@ -115,16 +114,16 @@ export const getAll = (req, res) => {
                     return res.boom.badImplementation(messages['m500.0']);
                 } else if (doc) {
                     logger.debug(`Returned some users`);
-                    
+
                     let data = [];
-                   
+
                     for (let i = 0; i< doc.length; i++){
                         let dt = doc[i].toJSON();
                         if (doc1.followers.includes(dt.username))
                             dt['isFollowers'] = true;
                         else
                             dt['isFollowers'] = false;
-                        
+
                         if (doc1.followee.includes(dt.username))
                             dt.isFollowee = true;
                         else

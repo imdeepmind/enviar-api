@@ -82,8 +82,8 @@ var getOne = exports.getOne = function getOne(req, res) {
 };
 
 var getAll = exports.getAll = function getAll(req, res) {
-    var page = (0, _xss2.default)(req.query.page);
-    var limit = (0, _xss2.default)(req.query.limit);
+    var page = Number((0, _xss2.default)(req.query.page));
+    var limit = Number((0, _xss2.default)(req.query.limit));
 
     if (!page || page < 0) page = 0;
     if (!limit || limit <= 0) limit = 10;

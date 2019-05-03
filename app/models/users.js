@@ -24,7 +24,7 @@ const schema = mongoose.Schema({
     email: {
         type: String,
         required: true,
-        min: 4, 
+        min: 4,
         max: 255,
         unique: true,
         trim: true,
@@ -61,6 +61,7 @@ const schema = mongoose.Schema({
         type: String,
         min: 4,
         max: 255,
+        default: "Hey, How are you?"
     },
     bio: {
         type: String,
