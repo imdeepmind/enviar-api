@@ -11,12 +11,12 @@ import logger from '../utils/logger';
 
 export const checkAuth = (req, res, next) => {
     const token = req.headers['authorization'];
-    
+
     if (token){
         jwt.verify(token, config.JWT_TOKEN, (err, authData) => {
             if (err){
                 logger.error('JWT Error: ', err);
-                return res.badImplementation(messages['m500.0']);
+                return res.boom.unauthorized(messages['m401.1']);
             }
             const findQuery = {
                 '_id' : {$eq: mongoose.Types.ObjectId(authData.obj_id)},
@@ -37,7 +37,7 @@ export const checkAuth = (req, res, next) => {
                     logger.debug(`Unauthorized: User with ${authData.username} does not exist`);
                     return res.boom.unauthorized(messages['m401.1']);
                 }
-            }) 
+            })
         });
     } else {
         logger.debug(`Does not have any token`);

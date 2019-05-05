@@ -68,8 +68,8 @@ var checkAuth = exports.checkAuth = function checkAuth(req, res, next) {
                     req.authData = authData;
                     next();
                 } else {
-                    _logger2.default.debug('User with ' + authData.username + ' does not exist');
-                    return res.boom.notFound(_messages2.default['m404.0']);
+                    _logger2.default.debug('Unauthorized: User with ' + authData.username + ' does not exist');
+                    return res.boom.unauthorized(_messages2.default['m401.1']);
                 }
             });
         });

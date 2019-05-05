@@ -85,7 +85,7 @@ var getAll = exports.getAll = function getAll(req, res) {
     var page = Number((0, _xss2.default)(req.query.page));
     var limit = Number((0, _xss2.default)(req.query.limit));
 
-    if (!page || page < 0) page = 0;
+    if (!page || page <= 0) page = 1;
     if (!limit || limit <= 0) limit = 10;
 
     var findQuery2 = {
@@ -93,9 +93,8 @@ var getAll = exports.getAll = function getAll(req, res) {
     };
 
     var selectedField = {
-        username: 1, name: 1, email: 1, city: 1, state: 1, country: 1,
-        gender: 1, dob: 1, avatar: 1, status: 1, bio: 1,
-        createdAt: 1, updatedAt: 1, isActive: 1, followee: 1, followers: 1
+        username: 1, name: 1, country: 1, gender: 1, dob: 1, avatar: 1, status: 1,
+        createdAt: 1, updatedAt: 1, isActive: 1
     };
 
     var selectedField2 = {
@@ -120,17 +119,18 @@ var getAll = exports.getAll = function getAll(req, res) {
                 };
             }
 
-            _users2.default.find(findQuery, selectedField, { limit: limit, skip: page * limit }, function (err, doc) {
+            _users2.default.paginate(findQuery, { select: selectedField, page: page, limit: limit }, function (err, doc) {
                 if (err) {
                     _logger2.default.error('Database error: ', err);
                     return res.boom.badImplementation(_messages2.default['m500.0']);
                 } else if (doc) {
-                    _logger2.default.debug('Returned some users');
+                    _logger2.default.debug('Returned some users', doc);
 
+                    var myUsers = doc.docs;
                     var data = [];
 
-                    for (var i = 0; i < doc.length; i++) {
-                        var dt = doc[i].toJSON();
+                    for (var i = 0; i < myUsers.length; i++) {
+                        var dt = myUsers[i].toJSON();
                         if (doc1.followers.includes(dt.username)) dt['isFollowers'] = true;else dt['isFollowers'] = false;
 
                         if (doc1.followee.includes(dt.username)) dt.isFollowee = true;else dt.isFollowee = false;
@@ -140,7 +140,13 @@ var getAll = exports.getAll = function getAll(req, res) {
                         data.push(dt);
                     }
 
-                    return res.status(200).json(data);
+                    return res.status(200).json({
+                        docs: data,
+                        total: doc.total,
+                        limit: doc.limit,
+                        page: doc.page,
+                        pages: doc.pages
+                    });
                 } else {
                     _logger2.default.debug('User with ' + doc.username + ' does not exist');
                     return res.boom.notFound(_messages2.default['m404.0']);

@@ -8,6 +8,10 @@ var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
+var _mongoosePaginate = require('mongoose-paginate');
+
+var _mongoosePaginate2 = _interopRequireDefault(_mongoosePaginate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var schema = _mongoose2.default.Schema({
@@ -70,7 +74,8 @@ var schema = _mongoose2.default.Schema({
     status: {
         type: String,
         min: 4,
-        max: 255
+        max: 255,
+        default: "Hey, How are you?"
     },
     bio: {
         type: String,
@@ -100,6 +105,8 @@ var schema = _mongoose2.default.Schema({
     followers: [],
     blocked: []
 });
+
+schema.plugin(_mongoosePaginate2.default);
 
 exports.default = _mongoose2.default.model('Users', schema);
 //# sourceMappingURL=users.js.map
