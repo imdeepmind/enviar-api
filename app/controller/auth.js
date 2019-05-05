@@ -79,9 +79,9 @@ export const register = (req, res) => {
                 logger.error('Bcrypt error', err);
                 return res.boom.badImplementation(messages['m500.0']);
             })
-            
 
-            
+
+
         }
     })
 }
@@ -119,7 +119,7 @@ export const login = (req, res) => {
                 let hash = '';
                 if (doc.tokenHash)
                     hash = doc.tokenHash;
-                else 
+                else
                     hash = generateHash();
 
                 const update = {
@@ -137,8 +137,8 @@ export const login = (req, res) => {
                             token: token
                         })
                     }
-                })    
-            }) 
+                })
+            })
             .catch(_ => {
                 logger.debug('Wrong password');
                 return res.boom.unauthorized(messages['m401.0']);
@@ -148,7 +148,7 @@ export const login = (req, res) => {
             return res.boom.notFound(messages['m404.0']);
         }
     })
-    
+
 }
 
 export const checkUsername = (req, res) => {
@@ -225,4 +225,10 @@ export const checkEmail = (req, res) => {
             return res.boom.notFound(messages['m404.0']);
         }
     })
+}
+
+export const checkToken = (req, res) => {
+  return res.status(200).json({
+    'authorized': true
+  });
 }
