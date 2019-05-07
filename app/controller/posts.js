@@ -2,6 +2,8 @@ import xss from 'xss';
 import mongoose from 'mongoose';
 
 import postModel from '../models/posts';
+import userModel from '../models/users';
+
 import logger from '../utils/logger';
 import messages from '../messages';
 
@@ -9,54 +11,97 @@ export const getPosts = (req, res) => {
     let page = Number(xss(req.query.page));
     let limit = Number(xss(req.query.limit));
     
-    if (!page || page < 0) page = 0;
+    if (!page || page < 0) page = 1;
     if (!limit || limit <= 0) limit = 10;
 
-    postModel.aggregate([
-        {
-            $lookup: {
-                from: 'users',
-                localField : 'author',
-                foreignField : 'username',
-                as: 'author'
-            }
-        }, 
-        {
-            $project: {
-                '_id' : 1,
-                'content' : 1,
-                'caption' : 1,
-                'createdAt': 1, 
-                'updatedAt': 1,
-                'author._id' : 1,
-                "author.username" : 1,
-                'author.avatar' : 1
-            }
-        },
-        {
-            $match: {
-                $or: [
-                    {"author.followers" : {$eq: req.authData.username}},
-                    {"author.username" : {$eq: req.authData.username}}
-                ]
-            }
-        },
-        {
-            $sort: {"updatedAt": -1}
-        },
-        {
-            $skip: page * limit
-        },
-        {
-            $limit: limit
-        },
-    ]).exec((err, doc) => {
+    const me = xss(req.authData.username);
+    
+    const findQuery = {
+        username: {$eq: me}
+    }
+
+    const selectedField = {
+        _id: 1, followee: 1
+    }
+
+    userModel.find(findQuery, selectedField, (err, doc) => {
         if (err) {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else {
-            logger.debug('Returning some posts');
-            return res.status(200).json(doc);
+            const followee = doc.followee;
+
+            const findQuery2 = {
+                $or: [
+                    {"author" : {$eq: me}},
+                    {"author" : {$eq: followee}}
+                ]
+            }
+
+            postModel.count(findQuery2, (err, doc) => {
+                if (err) {
+                    logger.error('Database error: ', err);
+                    return res.boom.badImplementation(messages['m500.0']);
+                } else { 
+                    const totalItems = doc;
+                    postModel.aggregate([
+                        {
+                            $match: {
+                                $or: [
+                                    {"author" : {$eq: me}},
+                                    {"author" : {$eq: followee}}
+                                ]
+                            }
+                        }, 
+                        {
+                            $lookup: {
+                                from: 'users',
+                                localField : 'author',
+                                foreignField : 'username',
+                                as: 'author'
+                            }
+                        }, 
+                        {
+                            $project: {
+                                '_id' : 1,
+                                'content' : 1,
+                                'caption' : 1,
+                                'createdAt': 1, 
+                                'updatedAt': 1,
+                                'author._id' : 1,
+                                "author.username" : 1,
+                                'author.avatar' : 1
+                            }
+                        },
+                        {
+                            $sort: {"updatedAt": -1}
+                        },
+                        {
+                            $skip: (page-1) * limit
+                        },
+                        {
+                            $limit: limit
+                        },
+                    ]).exec((err, doc) => {
+                        if (err) {
+                            logger.error('Database error: ', err);
+                            return res.boom.badImplementation(messages['m500.0']);
+                        } else {
+                            logger.debug('Returning some posts');
+                            const data = {
+                                docs: doc,
+                                total: totalItems,
+                                limit: limit,
+                                page: page,
+                                pages: Math.ceil(totalItems / limit)
+                            }
+                            return res.status(200).json(data);
+                        }
+                    })
+                }
+            })
+
+           
         }
     })
 }

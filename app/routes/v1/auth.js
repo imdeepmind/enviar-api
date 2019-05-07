@@ -13,6 +13,6 @@ router.get('/username/:username', checkUsername);
 
 router.get('/email/:email', checkEmail);
 
-router.get('/checkToken', checkAuth, checkToken);
+router.get('/token', checkAuth, checkToken);
 
 export default router;
