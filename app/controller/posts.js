@@ -70,7 +70,8 @@ export const getPosts = (req, res) => {
                                 'updatedAt': 1,
                                 'author._id' : 1,
                                 "author.username" : 1,
-                                'author.avatar' : 1
+                                'author.avatar' : 1,
+				'author.status' : 1
                             }
                         },
                         {
