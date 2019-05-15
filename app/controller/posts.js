@@ -29,8 +29,8 @@ export const getPosts = (req, res) => {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else {
-            const followee = doc.followee;
-
+            const followee = doc[0].followee;
+	
             const findQuery2 = {
                 $or: [
                     {"author" : {$eq: me}},
@@ -49,7 +49,7 @@ export const getPosts = (req, res) => {
                             $match: {
                                 $or: [
                                     {"author" : {$eq: me}},
-                                    {"author" : {$eq: followee}}
+                                    {"author" : {$in: followee}}
                                 ]
                             }
                         }, 
