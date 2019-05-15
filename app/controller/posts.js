@@ -34,7 +34,7 @@ export const getPosts = (req, res) => {
             const findQuery2 = {
                 $or: [
                     {"author" : {$eq: me}},
-                    {"author" : {$eq: followee}}
+                    {"author" : {$in: followee}}
                 ]
             }
 
