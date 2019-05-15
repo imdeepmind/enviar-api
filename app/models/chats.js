@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate';
 
 const schema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -6,7 +7,6 @@ const schema = mongoose.Schema({
         type: String,
         required: true,
         index: true,
-        unique: true,
         min: 4,
         max: 24,
         trim: true,
@@ -15,7 +15,6 @@ const schema = mongoose.Schema({
         type: String,
         required: true,
         index: true,
-        unique: true,
         min: 4,
         max: 24,
         trim: true,
@@ -31,5 +30,7 @@ const schema = mongoose.Schema({
         default: Date.now,
     },
 });
+
+schema.plugin(mongoosePaginate);
 
 export default mongoose.model('Chats', schema);

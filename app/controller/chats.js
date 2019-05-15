@@ -7,15 +7,64 @@ import userModel from '../models/users';
 import logger from '../utils/logger';
 import messages from '../messages';
 
+export const getChatsByUsername = (req, res) => {
+    let page = xss(req.query.page);
+    let limit = xss(req.query.limit);
+
+    if (!page || page <= 0) page = 1;
+    if (!limit || limit <= 0) limit = 10;
+
+    const me = xss(req.authData.username);
+    const you = xss(req.params.username);
+
+    const findQuery = {
+        $or: [
+            {'author' : {$in: [you, me]}},
+            {'to' : {$in: [you, me]}}
+        ]
+    }
+
+    const findQuery2 = {
+        username: {$eq: you}
+    }
+
+    const selectedField = {
+        _id: 1, author: 1, to: 1, message: 1, createdAt: 1
+    }
+
+    const selectedField2 = {
+      _id: 1, username: 1, name: 1, avatar: 1, status: 1
+    }
+
+    userModel.findOne(findQuery2, selectedField2, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else {
+            const you2 = doc.toJSON();
+            chatModel.paginate(findQuery, {select: selectedField, page: page, limit: limit}, (err, doc) => {
+                if (err) {
+                    logger.error('Database error: ', err);
+                    return res.boom.badImplementation(messages['m500.0']);
+                } else {
+                  logger.debug('Returning some chats');
+                  doc.you = you2;
+                  return res.status(200).json(doc);
+                }
+            })
+        }
+    })
+}
 
 export const getChats = (req, res) => {
     let page = xss(req.query.page);
     let limit = xss(req.query.limit);
-    
+
     if (!page || page < 0) page = 0;
     if (!limit || limit <= 0) limit = 10;
 
     const me = xss(req.authData.username);
+
     const findQuery = {
         $or: [
             {'author' : {$eq: me}},

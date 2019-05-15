@@ -1,13 +1,15 @@
 import express from 'express';
 
 import { checkAuth } from '../../middlewares';
-import { getChats, getChat, postChat, deleteChat } from '../../controller/chats';
+import { getChats, getChat, postChat, deleteChat, getChatsByUsername } from '../../controller/chats';
 
 const router = express.Router();
 
 router.get('/', checkAuth, getChats);
 
-router.get('/:id', checkAuth, getChat);
+router.get('/one/:id', checkAuth, getChat);
+
+router.get('/:username', checkAuth, getChatsByUsername);
 
 router.post('/:username', checkAuth, postChat)
 
