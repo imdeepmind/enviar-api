@@ -96,16 +96,8 @@ export const getAll = (req, res) => {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else {
-            let findQuery = {}
-            if (doc1.blocked.length > 0){
-                findQuery = {
-                    username: {$ne: xss(req.authData.username)},
-                    username: {$ne: doc1.blocked}
-                }
-            } else {
-                findQuery = {
-                    username: {$ne: xss(req.authData.username)}
-                }
+            let findQuery = {
+                username: {$ne: xss(req.authData.username)}
             }
 
             userModel.paginate(findQuery, { select: selectedField, page: page, limit: limit }, (err, doc) => {
@@ -120,21 +112,23 @@ export const getAll = (req, res) => {
 
                     for (let i = 0; i< myUsers.length; i++){
                         let dt = myUsers[i].toJSON();
-                        if (doc1.followers.includes(dt.username))
-                            dt['isFollowers'] = true;
-                        else
-                            dt['isFollowers'] = false;
-
-                        if (doc1.followee.includes(dt.username))
-                            dt.isFollowee = true;
-                        else
+                        if (doc1.blocked.includes(dt.username)){
+                          dt.isBlocked = true;
+                          dt['isFollowers'] = false;
                             dt.isFollowee = false;
+                        } else {
+                          dt.isBlocked = false;
+                          if (doc1.followers.includes(dt.username))
+                              dt['isFollowers'] = true;
+                          else
+                              dt['isFollowers'] = false;
 
-                        if (doc1.blocked.includes(dt.username))
-                            dt.isBlocked = true;
-                        else
-                            dt.isBlocked = false;
-
+                          if (doc1.followee.includes(dt.username))
+                              dt.isFollowee = true;
+                          else
+                              dt.isFollowee = false;
+                        }
+                        
                         data.push(dt);
                     }
 
