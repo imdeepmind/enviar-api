@@ -31,6 +31,7 @@ export const isBlocked = (me, you) => {
 
 export const followSomeone = (me, you) => {
     let deferred = Q.defer();
+
     const findQuery1 = {
         username: me, followee: {$ne: you}
     }
@@ -50,12 +51,12 @@ export const followSomeone = (me, you) => {
     userModel.findOneAndUpdate(findQuery1, update1, (err, doc) => {
         if (err) {
             logger.error('Database error: ', err);
-            deferred,reject(err);
+            deferred.reject(err);
         } else if (doc) {
             userModel.findOneAndUpdate(findQuery2, update2, (err, doc) => {
                 if (err) {
                     logger.error('Database error: ', err);
-                    deferred,reject(err);
+                    deferred.reject(err);
                 } else if (doc) {
                     deferred.resolve(doc);
                 } else {
@@ -71,6 +72,8 @@ export const followSomeone = (me, you) => {
 }
 
 export const unFollowSomeone = (me, you) => {
+    let deferred = Q.defer();
+    
     const findQuery1 = {
         username: me, followee: {$eq: you}
     }
@@ -97,7 +100,7 @@ export const unFollowSomeone = (me, you) => {
                     logger.error('Database error: ', err);
                     deferred.reject(err);
                 } else if (doc) {
-                    logger.debug( `User with ${target} not following ${me} `);
+                    logger.debug( `User with ${you} not following ${me} `);
                     deferred.resolve(doc)
                 } else {
                     logger.debug(`User does not exist`);
@@ -114,6 +117,8 @@ export const unFollowSomeone = (me, you) => {
 }
 
 export const blockSomeone = (me, you) => {
+    let deferred = Q.defer();
+    
     const findQuery = {
         username: me, blocked: {$ne: you}
     }
@@ -139,6 +144,8 @@ export const blockSomeone = (me, you) => {
 }
 
 export const unBlockSomeone = (me, you) => {
+    let deferred = Q.defer();
+    
     const findQuery = {
         username: me, blocked: {$eq: you}
     }
