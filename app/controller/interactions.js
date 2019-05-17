@@ -1,8 +1,7 @@
 import xss from 'xss';
 
-import { isBlocked, followSomeone, unFollowSomeone, blockSomeone, unBlockSomeone } from '../services';
+import { isBlocked, followSomeone, unFollowSomeone, blockSomeone, unBlockSomeone } from '../services/interactionService';
 
-import userModel from '../models/users';
 import logger from '../utils/logger';
 import messages from '../messages';
 
@@ -117,6 +116,7 @@ export const block = (req, res) => {
         return res.boom.badImplementation(messages['m500.0']);
     })
 }
+
 export const unblock = (req, res) => {
     const me = xss(req.authData.username);
     const you = xss(req.params.username);
