@@ -80,6 +80,8 @@ export const followSomeone = (me, you) => {
             deferred.resolve(false);
         }
     })
+
+    return deferred.promise;
 }
 
 export const unFollowSomeone = (me, you) => {
@@ -121,4 +123,56 @@ export const unFollowSomeone = (me, you) => {
             deferred.resolve(false);
         }
     })
+
+    return deferred.promise;
+}
+
+export const blockSomeone = (me, you) => {
+    const findQuery = {
+        username: me, blocked: {$ne: you}
+    }
+
+    const update = {
+        $push: {blocked: you}
+    }
+
+    userModel.findOneAndUpdate(findQuery, update, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            deferred.reject(err);
+        } else if (doc){
+            logger.debug( `User with ${you} username blocked by ${me} username `);
+            deferred.resolve(doc);
+        } else {
+            logger.debug(`User does not exist`);
+            deferred.resolve(false);
+        }
+    })
+
+    return deferred.promise;
+}
+
+export const unBlockSomeone = (me, you) => {
+    const findQuery = {
+        username: me, blocked: {$eq: you}
+    }
+
+    const update = {
+        $pull: {blocked: you}
+    }
+
+    userModel.findOneAndUpdate(findQuery, update, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            deferred.reject(err);
+        } else if (doc){
+            logger.debug( `User with ${you} username blocked by ${me} username `);
+            deferred.resolve(doc);
+        } else {
+            logger.debug(`User does not exist`);
+            deferred.resolve(false);
+        }
+    })
+
+    return deferred.promise;
 }

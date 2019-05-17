@@ -1,6 +1,6 @@
 import xss from 'xss';
 
-import { isBlocked, followSomeone } from '../services';
+import { isBlocked, followSomeone, unFollowSomeone } from '../services';
 
 import userModel from '../models/users';
 import logger from '../utils/logger';
@@ -41,48 +41,34 @@ export const follow = (req, res) => {
 
 export const unfollow = (req, res) => {
     const me = xss(req.authData.username);
-    const target = xss(req.params.username);
+    const you = xss(req.params.username);
 
-    const findQuery1 = {
-        username: me, followee: {$eq: target}
-    }
-
-    const findQuery2 = {
-        username: {$eq: target}
-    }
-
-    const update1 = {
-        $pull: {followee: target}
-    }
-
-    const update2 = {
-        $pull: {followers: me}
-    }
-
-    userModel.findOneAndUpdate(findQuery1, update1, (err, doc) => {
-        if (err) {
-            logger.error('Database error: ', err);
-            return res.boom.badImplementation(messages['m500.0']);
-        } else if (doc){
-            userModel.findOneAndUpdate(findQuery2, update2, (err, doc) => {
-                if (err) {
-                    logger.error('Database error: ', err);
-                    return res.boom.badImplementation(messages['m500.0']);
-                } else if (doc) {
-                    logger.debug( `User with ${target} not following ${me} `);
+    isBlocked(me, you).then(resp => {
+        if (resp){
+            logger.debug(`User blocked`);
+            return res.boom.notFound(messages['m404.0']);
+        } else {
+            unFollowSomeone(me, you).then(resp => {
+                if (resp) {
                     return res.status(201).json({
                         followee: me,
-                        followers: target
+                        followers: you
                     })
                 } else {
-                    logger.debug(`User does not exist`);
+                    logger.debug(`User blocked`);
                     return res.boom.notFound(messages['m404.0']);
                 }
             })
-        } else {
-            logger.debug(`User does not exist`);
-            return res.boom.notFound(messages['m404.0']);
+            .catch(err => {
+                logger.error('Database error: ', err);
+                return res.boom.badImplementation(messages['m500.0']);
+            })
         }
+        
+    })
+    .catch(err => {
+        logger.error('Database error: ', err);
+        return res.boom.badImplementation(messages['m500.0']);
     })
 }
 
