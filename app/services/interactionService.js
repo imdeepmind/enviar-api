@@ -6,37 +6,23 @@ import logger from '../utils/logger';
 
 export const isBlocked = (me, you) => {
     let deferred = Q.defer();
-    const findQuery1 = {
-        username: {$eq: me},
-        target: {$ne: you}
-    }
-
-    const findQuery2 = {
-        username: {$eq: you},
-        target: {$ne: me}
+    const findQuery = {
+        username: {$in: [me, you]},
+        blocked: {$in: [me, you]}
     }
 
     const selectedField = {
         _id: 1, username: 1, blocked: 1
     }
 
-    userModel.findOne(findQuery1, selectedField, (err, doc) => {
+    userModel.findOne(findQuery, selectedField, (err, doc) => {
         if (err) {
             logger.error('Database error: ', err);
             deferred.reject(err);
         } else if (doc) {
             deferred.resolve(true);
         } else {
-            userModel.findOne(findQuery2, selectedField, (err, doc) => {
-                if (err) {
-                    logger.error('Database error: ', err);
-                    deferred.reject(err);
-                } else if (doc) {
-                    deferred.resolve(true);
-                } else {
-                    deferred.resolve(false);
-                }
-            })
+            deferred.resolve(false);
         }
     })
 
