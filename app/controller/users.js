@@ -5,6 +5,11 @@ import logger from '../utils/logger';
 import messages from '../messages';
 
 export const getOne = (req, res) => {
+    if (req.authData.username === req.params.username){
+        logger.debug(`User with ${req.params.username} does not exist`);
+        return res.boom.notFound(messages['m404.0']);
+    }
+
     const findQuery2 = {
         username: {$eq: xss(req.authData.username)}
     }
