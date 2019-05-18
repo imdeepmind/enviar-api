@@ -45,17 +45,17 @@ export const getOne = (req, res) => {
 
                         let data = doc.toJSON();
 
-                        if (doc1.followers.includes(req.authData.username))
-                            data['isFollowers'] = true;
+                        if (doc1.followers.includes(req.params.username))
+                            data.isFollowers = true;
                         else
-                            data['isFollowers'] = false;
+                            data.isFollowers = false;
 
-                        if (doc1.followee.includes(req.authData.username))
+                        if (doc1.followee.includes(req.params.username))
                             data.isFollowee = true;
                         else
                             data.isFollowee = false;
 
-                        if (doc1.blocked.includes(req.authData.username))
+                        if (doc1.blocked.includes(req.params.username))
                             data.isBlocked = true;
                         else
                             data.isBlocked = false;
