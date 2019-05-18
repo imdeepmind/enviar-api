@@ -97,8 +97,14 @@ export const getAll = (req, res) => {
             return res.boom.badImplementation(messages['m500.0']);
         } else {
             let findQuery = {
-                username: {$ne: xss(req.authData.username)},
-                username: {$nin: xss(doc1.blocked)}
+                $and: [
+                    {
+                        username: {$ne: xss(req.authData.username)},
+                    }, 
+                    {
+                        username: {$nin: xss(doc1.blocked)}
+                    }
+                ]
             }
 
             userModel.paginate(findQuery, { select: selectedField, page: page, limit: limit }, (err, doc) => {
