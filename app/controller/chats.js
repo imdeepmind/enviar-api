@@ -7,6 +7,54 @@ import userModel from '../models/users';
 import logger from '../utils/logger';
 import messages from '../messages';
 
+const  mergeArrays = (...arrays) => {
+    let jointArray = []
+
+    arrays.forEach(array => {
+        jointArray = [...jointArray, ...array]
+    })
+    const uniqueArray = jointArray.filter((item,index) => jointArray.indexOf(item) === index)
+    return uniqueArray
+}
+
+export const allPeoples = (req, res) => {
+    const findQuery = {
+        username: {$eq: xss(req.authData.username)}
+    }
+
+    const selectedField = {
+        _id: 1, followers: 1, followee: 1
+    }
+
+    const selectedField2 = {
+        username: 1, name: 1, email: 1, city: 1, state: 1, country: 1,
+        gender: 1, dob: 1, avatar: 1, status: 1, bio: 1,
+        createdAt: 1, updatedAt: 1, isActive: 1,  followee: 1, followers: 1
+    }
+
+    userModel.findOne(findQuery, selectedField, (err, doc) => {
+        if (err){
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else {
+            const peoples = mergeArrays(doc.followee, doc.followers);
+            const findQuery2 = {
+                username: {$in: peoples}
+            }
+
+            userModel.find(findQuery2, selectedField2, (err, doc) => {
+                if (err){
+                    logger.error('Database error: ', err);
+                    return res.boom.badImplementation(messages['m500.0']);
+                } else {
+                    logger.debug(`Returned with chat users`);
+                    return res.status(200).json(doc);
+                }
+            })
+        }
+    })
+}
+
 export const getChatsByUsername = (req, res) => {
     let page = Number(xss(req.query.page));
     let limit = Number(xss(req.query.limit));

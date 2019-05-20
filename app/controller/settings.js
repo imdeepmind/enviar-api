@@ -25,7 +25,8 @@ export const updatePassword = (req, res) => {
 
     userModel.findOne(findQuery, selectedField, (err, doc) => {
         if (err){
-
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
         } else {
             const passhash = doc.password;
             comparePassword(passhash, req.body.old).then(resp => {
