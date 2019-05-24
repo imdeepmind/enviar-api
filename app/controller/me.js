@@ -143,11 +143,11 @@ export const getFollowing = (req, res) => {
         username: {$eq: xss(req.authData.username)}
     }
 
-    let page = Number(xss(req.query.page));
-    let limit = Number(xss(req.query.limit));
+    // let page = Number(xss(req.query.page));
+    // let limit = Number(xss(req.query.limit));
 
-    if (!page || page <= 0) page = 1;
-    if (!limit || limit <= 0) limit = 10;
+    // if (!page || page <= 0) page = 1;
+    // if (!limit || limit <= 0) limit = 10;
 
     const selectedField = {
         followee: 1
@@ -166,8 +166,8 @@ export const getFollowing = (req, res) => {
             const selectedField2 = {
                 username: 1, name: 1, avatar: 1, status: 1
             }
-
-            userModel.find(findQuery2, selectedField2, {limit: limit, skip: (page-1) * limit}, (err, doc) => {
+            // {limit: limit, skip: (page-1) * limit}, 
+            userModel.find(findQuery2, selectedField2, (err, doc) => {
                 if (err) {
                     logger.error('Database error: ', err);
                     return res.boom.badImplementation(messages['m500.0']);
@@ -188,11 +188,11 @@ export const getFollowers = (req, res) => {
         username: {$eq: xss(req.authData.username)}
     }
 
-    let page = Number(xss(req.query.page));
-    let limit = Number(xss(req.query.limit));
+    // let page = Number(xss(req.query.page));
+    // let limit = Number(xss(req.query.limit));
 
-    if (!page || page <= 0) page = 1;
-    if (!limit || limit <= 0) limit = 10;
+    // if (!page || page <= 0) page = 1;
+    // if (!limit || limit <= 0) limit = 10;
 
     const selectedField = {
         followers: 1
@@ -211,8 +211,8 @@ export const getFollowers = (req, res) => {
             const selectedField2 = {
                 username: 1, name: 1, avatar: 1, status: 1
             }
-
-            userModel.find(findQuery2, selectedField2, {limit: limit, skip: (page-1) * limit}, (err, doc) => {
+            // {limit: limit, skip: (page-1) * limit},
+            userModel.find(findQuery2, selectedField2, (err, doc) => {
                 if (err) {
                     logger.error('Database error: ', err);
                     return res.boom.badImplementation(messages['m500.0']);
@@ -233,11 +233,11 @@ export const getBlocked = (req, res) => {
         username: {$eq: xss(req.authData.username)}
     }
 
-    let page = Number(xss(req.query.page));
-    let limit = Number(xss(req.query.limit));
+    // let page = Number(xss(req.query.page));
+    // let limit = Number(xss(req.query.limit));
 
-    if (!page || page <= 0) page = 1;
-    if (!limit || limit <= 0) limit = 10;
+    // if (!page || page <= 0) page = 1;
+    // if (!limit || limit <= 0) limit = 10;
 
     const selectedField = {
         blocked: 1
@@ -256,8 +256,8 @@ export const getBlocked = (req, res) => {
             const selectedField2 = {
                 username: 1, name: 1, avatar: 1, status: 1
             }
-
-            userModel.find(findQuery2, selectedField2, {limit: limit, skip: (page-1) * limit}, (err, doc) => {
+            //  {limit: limit, skip: (page-1) * limit},
+            userModel.find(findQuery2, selectedField2, (err, doc) => {
                 if (err) {
                     logger.error('Database error: ', err);
                     return res.boom.badImplementation(messages['m500.0']);
