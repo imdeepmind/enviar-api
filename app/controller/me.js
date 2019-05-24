@@ -160,7 +160,7 @@ export const getFollowing = (req, res) => {
         } else if (doc) {
             const followee = doc.followee;
             const findQuery2 = {
-                followee: {$in: followee}
+                username: {$in: followee}
             }
 
             const selectedField2 = {
@@ -205,7 +205,7 @@ export const getFollowers = (req, res) => {
         } else if (doc) {
             const followers = doc.followers;
             const findQuery2 = {
-                followers: {$in: followers}
+                username: {$in: followers}
             }
 
             const selectedField2 = {
@@ -250,7 +250,7 @@ export const getBlocked = (req, res) => {
         } else if (doc) {
             const blocked = doc.blocked;
             const findQuery2 = {
-                blocked: {$in: blocked}
+                username: {$in: blocked}
             }
 
             const selectedField2 = {
