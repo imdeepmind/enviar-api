@@ -1,11 +1,17 @@
 import express from 'express';
 
 import { checkAuth, upload, resizeImage } from '../../middlewares';
-import { getMe, updateMe, deleteMe, updateDp } from '../../controller/me';
+import { getMe, updateMe, deleteMe, updateDp, getFollowing } from '../../controller/me';
 
 const router = express.Router();
 
 router.get('/', checkAuth, getMe);
+
+router.get('/followee', checkAuth, getFollowing);
+
+router.get('/followers', checkAuth, getFollowing);
+
+router.get('/blocked', checkAuth, getFollowing);
 
 router.put('/', checkAuth, updateMe);
 

@@ -137,3 +137,48 @@ export const updateDp = (req, res) => {
         }
     })
 }
+
+export const getFollowing = (req, res) => {
+    const findQuery = {
+        username: {$eq: xss(req.authData.username)}
+    }
+
+    let page = Number(xss(req.query.page));
+    let limit = Number(xss(req.query.limit));
+
+    if (!page || page <= 0) page = 1;
+    if (!limit || limit <= 0) limit = 10;
+
+    const selectedField = {
+        followee: 1
+    }
+
+    userModel.findOne(findQuery, selectedField, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else if (doc) {
+            const followee = doc.followee;
+            const findQuery2 = {
+                followee: {$in: followee}
+            }
+
+            const selectedField2 = {
+                username: 1, name: 1, avatar: 1, status: 1
+            }
+
+            userModel.find(findQuery2, selectedField2, {limit: limit, skip: (page-1) * limit}, (err, doc) => {
+                if (err) {
+                    logger.error('Database error: ', err);
+                    return res.boom.badImplementation(messages['m500.0']);
+                } else {
+                    return res.status(200).json(doc);
+                }
+            })
+        } else {
+            logger.debug(`User with ${req.authData.username} does not exist`);
+            return res.boom.notFound(messages['m404.0']);
+        }
+    })    
+
+}
