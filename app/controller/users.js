@@ -284,6 +284,7 @@ export const allFollowee = (req, res) => {
                     return res.boom.badImplementation(messages['m500.0']);
                 } else if (doc) {
                     const hisFollowee = doc.followee;
+                    console.log(hisFollowee)
 
                     const  findQuery3 = {
                         username: {$in: hisFollowee}
@@ -318,11 +319,9 @@ export const allFollowee = (req, res) => {
                                   else
                                       dt.isFollowee = false;
                                 }
-                                
                                 data.push(dt);
-
-                                return res.status(200).json(data);
                             }
+                            return res.status(200).json(data);
                         }
                     })
                 } else {
