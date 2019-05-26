@@ -159,3 +159,88 @@ export const getAll = (req, res) => {
         }
     })
 }
+
+export const allFollowers = (req, res) => {
+    if (req.authData.username === req.params.username){
+        logger.debug(`User with ${req.params.username} does not exist`);
+        return res.boom.notFound(messages['m404.0']);
+    }
+
+    const findQuery = {
+        username: {$eq: xss(req.authData.username)}
+    }
+    
+    const selectedField = {
+        followers: 1, followee: 1, blocked: 1
+    }
+
+    userModel.findOne(findQuery, selectedField, (err, doc) => {
+        if (err) {
+            logger.error('Database error: ', err);
+            return res.boom.badImplementation(messages['m500.0']);
+        } else {
+            const myFollowers = doc.followers;
+
+            const findQuery2 = {
+                username: {$eq: xss(req.params.username)},
+            }
+
+            selectedField2 = {
+                followers: 1
+            }
+
+            userModel.findOne(findQuery2, selectedField2, (err, doc) => {
+                if (err) {
+                    logger.error('Database error: ', err);
+                    return res.boom.badImplementation(messages['m500.0']);
+                } else if (doc) {
+                    const hisFollowers = doc.followers;
+
+                    const  findQuery3 = {
+                        username: {$in: hisFollowers}
+                    }
+
+                    const selectedField3 = {
+                        username: 1, name: 1, avatar: 1, status: 1
+                    }
+
+                    userModel.find(findQuery3, selectedField3, (err, doc) => {
+                        if (err) {
+                            logger.error('Database error: ', err);
+                            return res.boom.badImplementation(messages['m500.0']);
+                        } else {
+                            const data = [];
+
+                            for (let i = 0; i< doc.length; i++){
+                                let dt = doc[i].toJSON();
+                                if (myBlocked.includes(dt.username)){
+                                  dt.isBlocked = true;
+                                  dt['isFollowers'] = false;
+                                    dt.isFollowee = false;
+                                } else {
+                                  dt.isBlocked = false;
+                                  if (myFollowers.includes(dt.username))
+                                      dt['isFollowers'] = true;
+                                  else
+                                      dt['isFollowers'] = false;
+        
+                                  if (myFollowee.includes(dt.username))
+                                      dt.isFollowee = true;
+                                  else
+                                      dt.isFollowee = false;
+                                }
+                                
+                                data.push(dt);
+
+                                return res.status(200).json(data);
+                            }
+                        }
+                    })
+                } else {
+                    logger.debug(`User with ${req.params.username} does not exist`);
+                    return res.boom.notFound(messages['m404.0']);
+                }
+            })
+        }
+    })
+}

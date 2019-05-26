@@ -1,9 +1,11 @@
 import express from 'express';
 
 import { checkAuth } from '../../middlewares';
-import { getOne, getAll  } from '../../controller/users';
+import { getOne, getAll, allFollowers  } from '../../controller/users';
 
 const router = express.Router();
+
+router.get('/followers', checkAuth, allFollowers);
 
 router.get('/:username', checkAuth, getOne);
 
