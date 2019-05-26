@@ -171,7 +171,7 @@ export const allFollowers = (req, res) => {
     }
     
     const selectedField = {
-        followers: 1,
+        followers: 1, followee: 1, blocked: 1
     }
 
     userModel.findOne(findQuery, selectedField, (err, doc) => {
