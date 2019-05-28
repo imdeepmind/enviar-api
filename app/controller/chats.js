@@ -78,38 +78,21 @@ export const getChatsByUsername = (req, res) => {
         ]
     }
 
-    const findQuery2 = {
-        username: {$eq: you}
-    }
-
     const selectedField = {
         _id: 1, author: 1, to: 1, message: 1, createdAt: 1
-    }
-
-    const selectedField2 = {
-      _id: 1, username: 1, name: 1, avatar: 1, status: 1
     }
 
     const order = {
       createdAt: -1
     }
 
-    userModel.findOne(findQuery2, selectedField2, (err, doc) => {
+    chatModel.paginate(findQuery, {select: selectedField,sort: order, page: page, limit: limit}, (err, doc) => {
         if (err) {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
         } else {
-            const you2 = doc.toJSON();
-            chatModel.paginate(findQuery, {select: selectedField,sort: order, page: page, limit: limit}, (err, doc) => {
-                if (err) {
-                    logger.error('Database error: ', err);
-                    return res.boom.badImplementation(messages['m500.0']);
-                } else {
-                  logger.debug('Returning some chats');
-                  doc.you = you2;
-                  return res.status(200).json(doc);
-                }
-            })
+          logger.debug('Returning some chats');
+          return res.status(200).json(doc);
         }
     })
 }
