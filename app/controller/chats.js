@@ -170,7 +170,7 @@ export const getChat = (req, res) => {
 }
 
 export const postChat = (req, res) => {
-    req.check('message', 'Invalid message').isString().isLength({min:4, max:255});
+    req.check('message', 'Invalid message').isString().isLength({min:1, max:255});
 
     const errors = req.validationErrors();
     if (errors) {
