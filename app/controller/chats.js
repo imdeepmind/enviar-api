@@ -18,6 +18,12 @@ const  mergeArrays = (...arrays) => {
 }
 
 export const allPeoples = (req, res) => {
+    let page = xss(req.query.page);
+    let limit = xss(req.query.limit);
+
+    if (!page || page < 0) page = 0;
+    if (!limit || limit <= 0) limit = 10;
+
     const findQuery = {
         username: {$eq: xss(req.authData.username)}
     }
@@ -42,7 +48,7 @@ export const allPeoples = (req, res) => {
                 username: {$in: peoples}
             }
 
-            userModel.find(findQuery2, selectedField2, (err, doc) => {
+            userModel.find(findQuery2, selectedField2, {limit: limit, skip: page * limit}, (err, doc) => {
                 if (err){
                     logger.error('Database error: ', err);
                     return res.boom.badImplementation(messages['m500.0']);
