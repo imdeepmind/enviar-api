@@ -293,7 +293,6 @@ export const allFollowee = (req, res) => {
                     return res.boom.badImplementation(messages['m500.0']);
                 } else if (doc) {
                     const hisFollowee = doc.followee;
-                    console.log(hisFollowee)
 
                     const  findQuery3 = {
                         username: {$in: hisFollowee}
