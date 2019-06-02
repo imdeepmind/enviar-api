@@ -81,6 +81,8 @@ export const getAll = (req, res) => {
     if (!page || page <= 0) page = 1;
     if (!limit || limit <= 0) limit = 10;
 
+    const q = req.query.q ? xss(req.query.q) : false;
+
     const findQuery2 = {
         username: {$eq: xss(req.authData.username)}
     }
@@ -111,6 +113,13 @@ export const getAll = (req, res) => {
                     }
                 ]
             }
+
+            if (q) findQuery['$and'].push({
+                $or: [
+                    { username: {$regex: q, $options: "$i"} },
+                    { name: {$regex: q, $options: "$i"} }
+                ]
+            })
 
             userModel.paginate(findQuery, { select: selectedField, page: page, limit: limit }, (err, doc) => {
                 if (err) {
