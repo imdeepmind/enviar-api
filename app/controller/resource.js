@@ -3,6 +3,16 @@ import messages from '../messages';
 import logger from '../utils/logger';
 
 export const getImage = (req, res) => {
+    req.check('type', 'Invalid type of the image').isString().isIn(['post', 'profile']);
+    req.check('resolution', 'Invalid resolution of the image').isString().isIn(['medium', 'small']);
+    req.check('file', 'Invalid image link').isString().isLength({min:32, max:33});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     const type = xss(req.params.type);
     const file = xss(req.params.file);
     const resolution = xss(req.params.resolution);
@@ -14,9 +24,7 @@ export const getImage = (req, res) => {
         path1 = 'images';
 
     let path2 = '';
-    if (resolution === 'original')
-        path2 = 'raw';
-    else if (resolution === 'medium'){
+     if (resolution === 'medium'){
         if (type === 'profile')
             path2 = 'r200x200';
         else if (type === 'post')
