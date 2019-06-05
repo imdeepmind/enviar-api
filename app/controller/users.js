@@ -70,7 +70,7 @@ export const getOne = (req, res) => {
 
                         return res.status(200).json(data);
                     } else {
-                        logger.debug(`User with ${doc.username} does not exist`);
+                        logger.debug(`User with ${req.params.username} does not exist`);
                         return res.boom.notFound(messages['m404.0']);
                     }
                 })
