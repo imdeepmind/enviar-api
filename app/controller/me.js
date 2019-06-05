@@ -30,16 +30,16 @@ export const getMe = (req, res) => {
 }
 
 export const updateMe = (req, res) => {
-    req.check('email', 'Invalid email').isString().isLength({min:4, max:255}).isEmail().optional();
-    req.check('name', 'Invalid name').isString().isLength({min:4, max:255}).optional();
-    req.check('gender', 'Invalid gender').isString().isIn(['m', 'f', 'o']).optional();
-    req.check('dob', 'Invalid date of birth').isString().isBefore().optional().custom(date => {
+    req.check('email', 'Invalid email').isString().isLength({min:4, max:255}).isEmail();
+    req.check('name', 'Invalid name').isString().isLength({min:4, max:255});
+    req.check('gender', 'Invalid gender').isString().isIn(['m', 'f', 'o']);
+    req.check('dob', 'Invalid date of birth').isString().isBefore().custom(date => {
         return date.match(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
-    }).optional();
-    req.check('country', 'Invalid country').isString().isLength({min:4, max:255}).optional();
+    });
+    req.check('country', 'Invalid country').isString().isLength({min:4, max:255});
     req.check('city', 'Invalid city').isString().isLength({min:4, max:255}).optional();
     req.check('state', 'Invalid state').isString().isLength({min:4, max:255}).optional();
-    req.check('status', 'Invalid status').isString().isLength({min:4, max:255}).optional();
+    req.check('status', 'Invalid status').isString().isLength({min:4, max:255});
     req.check('bio', 'Invalid bio').isString().isLength({min:24, max:1024}).optional();
     
     const errors = req.validationErrors();
