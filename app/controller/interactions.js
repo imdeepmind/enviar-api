@@ -6,6 +6,14 @@ import logger from '../utils/logger';
 import messages from '../messages';
 
 export const follow = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     const me = xss(req.authData.username);
     const you = xss(req.params.username);
 
@@ -39,6 +47,14 @@ export const follow = (req, res) => {
 }
 
 export const unfollow = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+    
     const me = xss(req.authData.username);
     const you = xss(req.params.username);
 
@@ -72,6 +88,14 @@ export const unfollow = (req, res) => {
 }
 
 export const block = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     const me = xss(req.authData.username);
     const you = xss(req.params.username);
 
@@ -118,6 +142,14 @@ export const block = (req, res) => {
 }
 
 export const unblock = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+    
     const me = xss(req.authData.username);
     const you = xss(req.params.username);
 

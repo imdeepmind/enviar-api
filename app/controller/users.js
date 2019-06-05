@@ -5,6 +5,14 @@ import logger from '../utils/logger';
 import messages from '../messages';
 
 export const getOne = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     if (req.authData.username === req.params.username){
         logger.debug(`User with ${req.params.username} does not exist`);
         return res.boom.notFound(messages['m404.0']);
@@ -75,6 +83,16 @@ export const getOne = (req, res) => {
 }
 
 export const getAll = (req, res) => {
+    req.check('page', 'Invalid page number').isString();
+    req.check('limit', 'Invalid size of the page').isString();
+    req.check('q', 'Invalid search query').isString().isLength({min:4, max:24}).optional();
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     let page = Number(xss(req.query.page));
     let limit = Number(xss(req.query.limit));
 
@@ -170,6 +188,14 @@ export const getAll = (req, res) => {
 }
 
 export const allFollowers = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     if (req.authData.username === req.params.username){
         logger.debug(`User with ${req.params.username} does not exist`);
         return res.boom.notFound(messages['m404.0']);
@@ -257,6 +283,14 @@ export const allFollowers = (req, res) => {
 }
 
 export const allFollowee = (req, res) => {
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     if (req.authData.username === req.params.username){
         logger.debug(`User with ${req.params.username} does not exist`);
         return res.boom.notFound(messages['m404.0']);

@@ -18,6 +18,15 @@ const  mergeArrays = (...arrays) => {
 }
 
 export const allPeoples = (req, res) => {
+    req.check('page', 'Invalid page number').isString();
+    req.check('limit', 'Invalid size of the page').isString();
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     let page = Number(xss(req.query.page));
     let limit = Number(xss(req.query.limit));
 
@@ -62,6 +71,16 @@ export const allPeoples = (req, res) => {
 }
 
 export const getChatsByUsername = (req, res) => {
+    req.check('page', 'Invalid page number').isString();
+    req.check('limit', 'Invalid size of the page').isString();
+    req.check('username', 'Invalid username').isString().isLength({min:4, max:24});
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+    
     let page = Number(xss(req.query.page));
     let limit = Number(xss(req.query.limit));
 
@@ -98,6 +117,15 @@ export const getChatsByUsername = (req, res) => {
 }
 
 export const getChats = (req, res) => {
+    req.check('page', 'Invalid page number').isString();
+    req.check('limit', 'Invalid size of the page').isString();
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+    
     let page = xss(req.query.page);
     let limit = xss(req.query.limit);
 
@@ -129,6 +157,16 @@ export const getChats = (req, res) => {
 }
 
 export const getChat = (req, res) => {
+    req.check('id', 'Invalid id').isString().custom(val => mongoose.Types.ObjectId.isValid(val));
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
+    const me = xss(req.authData.username);
+
     const findQuery = {
         $or: [
             {'author' : {$eq: me}},
@@ -201,6 +239,14 @@ export const postChat = (req, res) => {
 }
 
 export const deleteChat = (req, res) => {
+    req.check('id', 'Invalid id').isString().custom(val => mongoose.Types.ObjectId.isValid(val));
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+    
     const findQuery = {
         _id: new mongoose.Schema.Types.ObjectId(req.params.id),
         author: {$eq: req.authData.username}

@@ -8,6 +8,15 @@ import logger from '../utils/logger';
 import messages from '../messages';
 
 export const getPosts = (req, res) => {
+    req.check('page', 'Invalid page number').isString();
+    req.check('limit', 'Invalid size of the page').isString();
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     let page = Number(xss(req.query.page));
     let limit = Number(xss(req.query.limit));
 
@@ -126,6 +135,14 @@ export const getPosts = (req, res) => {
 }
 
 export const getPotsById = (req, res) => {
+    req.check('id', 'Invalid id').isString().custom(val => mongoose.Types.ObjectId.isValid(val));
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+
     const findQuery = {
         _id: {
             $eq: xss(req.params.id)
@@ -153,10 +170,7 @@ export const getPotsById = (req, res) => {
 }
 
 export const addPost = (req, res) => {
-    req.check('caption', 'Invalid caption').isString().isLength({
-        min: 4,
-        max: 255
-    }).optional();
+    req.check('caption', 'Invalid caption').isString().isLength({min: 4,max: 255}).optional();
 
     const errors = req.validationErrors();
     if (errors) {
@@ -195,10 +209,7 @@ export const addPost = (req, res) => {
 }
 
 export const editPost = (req, res) => {
-    req.check('caption', 'Invalid caption').isString().isLength({
-        min: 4,
-        max: 255
-    });
+    req.check('caption', 'Invalid caption').isString().isLength({min: 4, max: 255});
 
     const errors = req.validationErrors();
     if (errors) {
@@ -232,6 +243,14 @@ export const editPost = (req, res) => {
 }
 
 export const deletePost = (req, res) => {
+    req.check('id', 'Invalid id').isString().custom(val => mongoose.Types.ObjectId.isValid(val));
+
+    const errors = req.validationErrors();
+    if (errors) {
+        logger.debug('Validation didn\'t succeed');
+        return res.boom.badRequest(messages['m400.2'], errors);
+    }
+    
     const findQuery = {
         _id: {
             $eq: mongoose.Types.ObjectId(req.params.id)
