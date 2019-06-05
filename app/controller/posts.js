@@ -139,9 +139,10 @@ export const addPost = (req, res) => {
     const data = {
         _id:  new mongoose.Types.ObjectId(),
         author: xss(req.authData.username),
-        content: req.file.filename,
-        caption: xss(req.body.caption)
+        content: req.file.filename
     }
+
+    if (req.body.caption) data['caption'] = xss(req.body.caption);
 
     const post = new postModel(data);
 
