@@ -10,18 +10,21 @@ import messages from '../messages';
 export const getPosts = (req, res) => {
     let page = Number(xss(req.query.page));
     let limit = Number(xss(req.query.limit));
-    
+
     if (!page || page < 0) page = 1;
     if (!limit || limit <= 0) limit = 10;
 
     const me = xss(req.authData.username);
-    
+
     const findQuery = {
-        username: {$eq: me}
+        username: {
+            $eq: me
+        }
     }
 
     const selectedField = {
-        _id: 1, followee: 1
+        _id: 1,
+        followee: 1
     }
 
     userModel.find(findQuery, selectedField, (err, doc) => {
@@ -30,11 +33,18 @@ export const getPosts = (req, res) => {
             return res.boom.badImplementation(messages['m500.0']);
         } else {
             const followee = doc[0].followee;
-	
+
             const findQuery2 = {
-                $or: [
-                    {"author" : {$eq: me}},
-                    {"author" : {$in: followee}}
+                $or: [{
+                        "author": {
+                            $eq: me
+                        }
+                    },
+                    {
+                        "author": {
+                            $in: followee
+                        }
+                    }
                 ]
             }
 
@@ -42,43 +52,51 @@ export const getPosts = (req, res) => {
                 if (err) {
                     logger.error('Database error: ', err);
                     return res.boom.badImplementation(messages['m500.0']);
-                } else { 
+                } else {
                     const totalItems = doc;
-                    postModel.aggregate([
-                        {
+                    postModel.aggregate([{
                             $match: {
-                                $or: [
-                                    {"author" : {$eq: me}},
-                                    {"author" : {$in: followee}}
+                                $or: [{
+                                        "author": {
+                                            $eq: me
+                                        }
+                                    },
+                                    {
+                                        "author": {
+                                            $in: followee
+                                        }
+                                    }
                                 ]
                             }
-                        }, 
+                        },
                         {
                             $lookup: {
                                 from: 'users',
-                                localField : 'author',
-                                foreignField : 'username',
+                                localField: 'author',
+                                foreignField: 'username',
                                 as: 'author'
                             }
-                        }, 
+                        },
                         {
                             $project: {
-                                '_id' : 1,
-                                'content' : 1,
-                                'caption' : 1,
-                                'createdAt': 1, 
+                                '_id': 1,
+                                'content': 1,
+                                'caption': 1,
+                                'createdAt': 1,
                                 'updatedAt': 1,
-                                'author._id' : 1,
-                                "author.username" : 1,
-                                'author.avatar' : 1,
-				'author.status' : 1
+                                'author._id': 1,
+                                "author.username": 1,
+                                'author.avatar': 1,
+                                'author.status': 1
                             }
                         },
                         {
-                            $sort: {"updatedAt": -1}
+                            $sort: {
+                                "updatedAt": -1
+                            }
                         },
                         {
-                            $skip: (page-1) * limit
+                            $skip: (page - 1) * limit
                         },
                         {
                             $limit: limit
@@ -102,18 +120,25 @@ export const getPosts = (req, res) => {
                 }
             })
 
-           
+
         }
     })
 }
 
 export const getPotsById = (req, res) => {
     const findQuery = {
-        _id: {$eq: xss(req.params.id)}
+        _id: {
+            $eq: xss(req.params.id)
+        }
     }
 
     const selectedField = {
-        author: 1, content: 1, caption: 1, createdAt: 1, updatedAt: 1, _id: 1
+        author: 1,
+        content: 1,
+        caption: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        _id: 1
     }
 
     postModel.findOne(findQuery, selectedField, (err, doc) => {
@@ -128,7 +153,10 @@ export const getPotsById = (req, res) => {
 }
 
 export const addPost = (req, res) => {
-    req.check('caption', 'Invalid caption').isString().isLength({min:4, max:255}).optional();
+    req.check('caption', 'Invalid caption').isString().isLength({
+        min: 4,
+        max: 255
+    }).optional();
 
     const errors = req.validationErrors();
     if (errors) {
@@ -136,13 +164,15 @@ export const addPost = (req, res) => {
         return res.boom.badRequest(messages['m400.2'], errors);
     }
 
+    console.log(req.file.filename)
+
     const data = {
-        _id:  new mongoose.Types.ObjectId(),
+        _id: new mongoose.Types.ObjectId(),
         author: xss(req.authData.username),
         content: req.file.filename
     }
 
-    if (req.body.caption) data['caption'] = xss(req.body.caption);
+    if (req.body.caption && req.body.caption !== undefined) data['caption'] = xss(req.body.caption);
 
     const post = new postModel(data);
 
@@ -165,7 +195,10 @@ export const addPost = (req, res) => {
 }
 
 export const editPost = (req, res) => {
-    req.check('caption', 'Invalid caption').isString().isLength({min:4, max:255});
+    req.check('caption', 'Invalid caption').isString().isLength({
+        min: 4,
+        max: 255
+    });
 
     const errors = req.validationErrors();
     if (errors) {
@@ -174,7 +207,9 @@ export const editPost = (req, res) => {
     }
 
     const findQuery = {
-        _id: {$eq: mongoose.Types.ObjectId(req.params.id)}
+        _id: {
+            $eq: mongoose.Types.ObjectId(req.params.id)
+        }
     }
 
     let data = {};
@@ -187,7 +222,7 @@ export const editPost = (req, res) => {
         if (err) {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
-        } else if (doc){
+        } else if (doc) {
             return res.status(201).json(data);
         } else {
             logger.debug(`Post with ${req.params.id} does not exist`);
@@ -198,14 +233,16 @@ export const editPost = (req, res) => {
 
 export const deletePost = (req, res) => {
     const findQuery = {
-        _id: {$eq: mongoose.Types.ObjectId(req.params.id)}
+        _id: {
+            $eq: mongoose.Types.ObjectId(req.params.id)
+        }
     }
 
     postModel.findOneAndRemove(findQuery, (err, doc) => {
         if (err) {
             logger.error('Database error: ', err);
             return res.boom.badImplementation(messages['m500.0']);
-        } else if (doc){
+        } else if (doc) {
             return res.status(204).json({
                 deleted: req.params.id
             });

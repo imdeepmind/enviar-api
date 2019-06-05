@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import path from 'path';
 import sharp from 'sharp';
+import fs from 'fs';
 
 import config from '../config';
 import messages from '../messages';
@@ -91,6 +92,7 @@ export const resizeImage = (req,res,next) => {
         .toFile('images/r48x48/' + name)
         .then((_) => {
             logger.debug('Resizing image to 48x48');
+            fs.unlink(path, () => logger.debug('Deleted the raw image'));
             next();
         })
     })
@@ -108,6 +110,7 @@ export const resizePostImage = (req,res,next) => {
     .toFile('posts/r500x500/' + name)
     .then((_) => {
         logger.debug('Resizing image to 500x500');
+        fs.unlink(path, () => logger.debug('Deleted the raw image'));
         next();
     })
     .catch(err => {
